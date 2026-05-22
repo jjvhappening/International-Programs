@@ -1,0 +1,7 @@
+.claude/
+.playwright-mcp/
+__pycache__/
+*.pyc
+.env
+memory/
+**/*-temp.json

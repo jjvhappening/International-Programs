@@ -1,0 +1,2151 @@
+{
+  "last_run": "2026-05-21",
+  "run_number": 13,
+  "slack_unavailable_this_run": false,
+  "notion_sync_skipped_this_run": false,
+  "notion_sync_skip_reason": null,
+  "dq_not_closed_out": [],
+  "suggested_dependencies": [
+    {
+      "id": "SD-001",
+      "initiative_a": "PLT-330",
+      "initiative_b": "PLAYER-1375",
+      "suggested_link": "PLT-330 is blocked by PLAYER-1375",
+      "confidence_reason": "PLT-330 SSU (2026-05-01): 'Blockers: wallet pipeline, SEON, scale-down fails.' PLAYER-1375 is the SEON AML migration initiative.",
+      "first_suggested": "2026-05-01",
+      "times_suggested": 1,
+      "status": "dismissed",
+      "dismissed_by": "run10-player1375-closed"
+    },
+    {
+      "id": "SD-002",
+      "initiative_a": "PLAYER-993",
+      "initiative_b": "DAP-3",
+      "suggested_link": "PLAYER-993 is blocked by DAP-3",
+      "confidence_reason": "PLAYER-993 transitioned to Won't Do on 2026-05-11 — CICO initiative closed/merged. Dependency no longer relevant.",
+      "first_suggested": "2026-05-01",
+      "times_suggested": 2,
+      "status": "dismissed",
+      "dismissed_by": "auto-run-7-player993-closed"
+    },
+    {
+      "id": "SD-003",
+      "initiative_a": "PLAYER-102",
+      "initiative_b": "PLT-330",
+      "suggested_link": "PLAYER-102 is dependent on PLT-330",
+      "confidence_reason": "Run 10 (2026-05-18): Gaming channel explicitly asked Platform team for Buy Bonus ETA. Run 11 (2026-05-19): Steerco (2026-05-13) confirmed EGT Digital Buy Bonus deferred to Q3 citing 'missing capacity on dependent teams'. Both PLAYER-102 and PLT-330 co-referenced in same Steerco update. Run 12 (2026-05-20): Luka Prsa (#tmp-romania-migration-gaming, 2026-05-18) asked 'Buy bonus ETA for June 1?' — third independent corroboration of Platform/Gaming dependency. No existing Jira link between them.",
+      "first_suggested": "2026-05-18",
+      "times_suggested": 3,
+      "status": "pending",
+      "dismissed_by": null
+    },
+    {
+      "id": "SD-004",
+      "initiative_a": "GAM-11319",
+      "initiative_b": "GAM-10668",
+      "suggested_link": "GAM-11319 (Spribe Bragg aggregator, Blocked) may block GAM-10668 (Bragg FS RO Nap, In Delivery)",
+      "confidence_reason": "Both are Bragg ecosystem initiatives. Niels flagged GAM-11319 Blocked on 2026-05-19. Majid reported GAM-10668 'Blocked due to other priorities' on 2026-05-18. Both co-referenced in #tmp-romania-migration-gaming and #content-engagement-integrations-sync within same week. Run 13 (2026-05-21): GAM-11319 confirmed Blocked (score=10). GAM-10668 score reduced to 4 (fresh update). Both co-occurring Bragg initiatives targeting May 29.",
+      "first_suggested": "2026-05-20",
+      "times_suggested": 2,
+      "status": "pending",
+      "dismissed_by": null
+    }
+  ],
+  "risks": [
+    {
+      "id": "RR-001",
+      "comments_posted": [],
+      "title": "Romania Platform Migration — load testing, connectivity, multi-blocker",
+      "category": "technical",
+      "sources": [
+        "jira",
+        "slack",
+        "cpr"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "Closed",
+      "workstream": "PLT",
+      "jira_issues": [
+        "PLT-330"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "notion_page_id": "353032f852c581ffb770e5f43aae6eb5",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-07",
+      "occurrences": 4,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 9 (2026-05-15): Closed. Run 10 (2026-05-18): Closed. Run 11 (2026-05-19): Closed. PLT-330 updated today but tracked under RR-019 (MIG environment) — RR-001 remains closed (original multi-blocker risk resolved)."
+    },
+    {
+      "id": "RR-002",
+      "comments_posted": [
+        {
+          "jira_key": "PLAYER-1299",
+          "date": "2026-05-07",
+          "run_number": 5
+        },
+        {
+          "jira_key": "PLAYER-1299",
+          "date": "2026-05-18",
+          "run_number": 10
+        }
+      ],
+      "title": "KYC/RG/SE API — undocumented cross-tribe dependency + ONJN compliance risk",
+      "category": "compliance",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 1,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1299"
+      ],
+      "product_lead": "Preethisri Ravichandran",
+      "engineering_lead": "Abraham Lopez Diaz",
+      "days_to_release": 26,
+      "planned_release_date": "2026-06-15",
+      "notion_page_id": "353032f852c581118602fa60561e0aa0",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 13,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "not_closed_out",
+        "child_epics": [
+          "MANAGE-2996",
+          "MANAGE-3005",
+          "MANAGE-3006",
+          "MANAGE-3135"
+        ],
+        "label_stamped": true
+      },
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Score=6 up from 1. Stale+Slack+cross_source. Jira comment posted. Run 11 (2026-05-19): Score=0. PLAYER-1299 updated 2026-05-18 — staleness cleared. Prior Slack threads (May 11) outside 7d window. No new signals. De-escalated. Run 12 (2026-05-20): Score=0 stable. No new signals. Run 13 (2026-05-21): Score=1. In Delivery, 25d, fresh update."
+    },
+    {
+      "id": "RR-003",
+      "comments_posted": [
+        {
+          "jira_key": "IP-17",
+          "date": "2026-05-07",
+          "run_number": 5
+        }
+      ],
+      "title": "Regulatory reporting pipeline missing — hard 15 May deadline",
+      "category": "timeline",
+      "sources": [
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "Closed",
+      "workstream": "IP",
+      "jira_issues": [
+        "IP-17"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "notion_page_id": "353032f852c5818989daf3384d3f178d",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-11",
+      "occurrences": 5,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 9 (2026-05-15): Closed. IP-17 Done. Run 10 (2026-05-18): Closed. Run 11 (2026-05-19): Closed. No change."
+    },
+    {
+      "id": "RR-004",
+      "comments_posted": [
+        {
+          "jira_key": "DAP-3",
+          "date": "2026-05-07",
+          "run_number": 5
+        }
+      ],
+      "title": "Core data migration blocked — payment device & fraud/AML mapping",
+      "category": "technical",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [
+        "stale_delivery",
+        "slack_single_mention"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C09V3SK2936/p1779173533528219",
+          "channel": "#tmp-romania-migration-data",
+          "summary": "Alexandru Zabava: Payment device data quality issues — spaces in account holder names, duplicate IBAN-linked payment devices. Ongoing investigation 2026-05-19."
+        },
+        {
+          "url": "https://superbet.slack.com/archives/C09V3SK2936/p1779173474957779",
+          "channel": "#tmp-romania-migration-data",
+          "summary": "Marija Aleksic: Gaming history batch 2 (117M records) sent successfully 2026-05-19. Migration progressing."
+        }
+      ],
+      "score": 6,
+      "score_last_run": 3,
+      "trend": "↑",
+      "severity": "high",
+      "impact": "medium",
+      "status": "Escalated",
+      "workstream": "DAP",
+      "jira_issues": [
+        "DAP-3"
+      ],
+      "product_lead": null,
+      "engineering_lead": "Isak Kazazic",
+      "days_to_release": 105,
+      "planned_release_date": "2026-09-01",
+      "notion_page_id": "353032f852c5813a89b2d1e15061a8d9",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 12,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": true,
+      "suppressed_by": "notion_checkbox_run7",
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): SUPPRESSED. Score=3. Run 11 (2026-05-19): SUPPRESSED. Score=3 stable. #tmp-romania-migration-data active: BATCH_07 gaming history (117M records) succeeded. Payment device data quality issues ongoing. Run 12 (2026-05-20): SUPPRESSED. Score=3 stable. Slack activity continues in #tmp-romania-migration-data — payment device data quality (spaces in names, duplicate IBANs) under investigation. Notion sync active this run — will re-read Suppressed checkbox. Run 13 (2026-05-21): Score=6. 14d stale (2) + Slack data threads (2) + cross-source bonus (2). Suppressed."
+    },
+    {
+      "id": "RR-005",
+      "comments_posted": [],
+      "title": "SEON AML migration stalled — external team overloaded",
+      "category": "dependency",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "Closed",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1375"
+      ],
+      "product_lead": "Filip Gvardijan",
+      "engineering_lead": "Litha Hari",
+      "days_to_release": null,
+      "notion_page_id": "353032f852c581d5a918cd55b662ee2f",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-06",
+      "occurrences": 3,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Closed. PLAYER-1375 confirmed Closed. Run 11 (2026-05-19): Closed. PLAYER-1375 Awaiting Delivery (release 2026-08-28) — SEON config live per Steerco May 13."
+    },
+    {
+      "id": "RR-006",
+      "comments_posted": [],
+      "title": "iCORE data gaps — 79k records unmigratable (CNP + external_id missing)",
+      "category": "scope",
+      "sources": [
+        "cpr"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "Closed",
+      "workstream": "DAP",
+      "jira_issues": [
+        "DAP-3"
+      ],
+      "product_lead": null,
+      "engineering_lead": "Isak Kazazic",
+      "days_to_release": null,
+      "notion_page_id": null,
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-01",
+      "occurrences": 1,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. No change."
+    },
+    {
+      "id": "RR-007",
+      "comments_posted": [],
+      "title": "Compliance decision open 6 weeks — RO re-verification / Google passwordless",
+      "category": "compliance",
+      "sources": [
+        "cpr"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "Closed",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-176"
+      ],
+      "product_lead": "Preethisri Ravichandran",
+      "engineering_lead": "Jorge Vilca Ypanaque",
+      "days_to_release": null,
+      "notion_page_id": "353032f852c581cb8b51c494ac12cb63",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-01",
+      "occurrences": 2,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. No change."
+    },
+    {
+      "id": "RR-008",
+      "comments_posted": [],
+      "title": "26 June dev-complete deadline — low sports tribe engagement",
+      "category": "timeline",
+      "sources": [
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "Closed",
+      "workstream": "PLT",
+      "jira_issues": [
+        "PLT-330"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "notion_page_id": "353032f852c5810a8748d917ddbcbf01",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-04",
+      "occurrences": 3,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. No change."
+    },
+    {
+      "id": "RR-009",
+      "comments_posted": [
+        {
+          "jira_key": "PLAYER-993",
+          "date": "2026-05-11",
+          "run_number": 6
+        }
+      ],
+      "title": "Payment V1/V2 sunset conflict — migration scope expanded",
+      "category": "scope",
+      "sources": [
+        "cpr",
+        "jira",
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "Closed",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-888"
+      ],
+      "product_lead": "Sander Rogiers",
+      "engineering_lead": "Moses Mansaray",
+      "days_to_release": null,
+      "notion_page_id": "353032f852c58126bcd5d168bc8c72a6",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-11",
+      "occurrences": 6,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. No change."
+    },
+    {
+      "id": "RR-010",
+      "comments_posted": [],
+      "title": "Multichannel SSBT scope gap — no Jira initiative found",
+      "category": "scope",
+      "sources": [
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "low",
+      "status": "Closed",
+      "workstream": "PLAYER",
+      "jira_issues": [],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "notion_page_id": null,
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-01",
+      "occurrences": 1,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. No change."
+    },
+    {
+      "id": "RR-011",
+      "comments_posted": [
+        {
+          "jira_key": "PLAYER-102",
+          "date": "2026-05-20",
+          "run_number": 12
+        }
+      ],
+      "title": "EGT Digital Buy Bonus Rounds (RO Migration) — On Hold, active blocker, Q3 deferral confirmed",
+      "category": "technical",
+      "sources": [
+        "jira",
+        "slack",
+        "cpr"
+      ],
+      "signals": [
+        "on_hold_blocked",
+        "active_blocker_dependency",
+        "q3_deferral_confirmed",
+        "cross_source_bonus"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C08FSV38EJK/p1779096785627009",
+          "channel": "#content-engagement-integrations-sync",
+          "summary": "Majid Rodriguez (2026-05-18): 'EGT Digital buy bonus: Descoped for Q2 due to missing capacity on dependent teams.' Backlog section of Gaming Rewards weekly update."
+        },
+        {
+          "url": "https://superbet.slack.com/archives/C06HULLL8DT/p1778676476361109",
+          "channel": "#international-programs-updates",
+          "summary": "Yentel Kina Steerco (2026-05-13): 'EGT Digital Buy Bonus Rounds deferred to Q3.' Programme-level confirmation of Q3 deferral."
+        },
+        {
+          "url": "https://superbet.slack.com/archives/C09UY82EE9L",
+          "channel": "#tmp-romania-migration-gaming",
+          "summary": "Luka Prsa (2026-05-18): 'Buy bonus ETA for June 1?' — third independent signal questioning Platform team ETA for Buy Bonus delivery ahead of June 1 audit milestone."
+        }
+      ],
+      "score": 7,
+      "score_last_run": 7,
+      "trend": "→",
+      "severity": "high",
+      "impact": "high",
+      "status": "Escalated",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-102"
+      ],
+      "product_lead": "Majid Rodriguez",
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": "358032f852c581f1843cd3faea137465",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 7,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": true,
+      "suppressed_by": "notion-checkbox-run13",
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [
+        "GAM-10846"
+      ],
+      "notes": "Run 10 (2026-05-18): Score=8. On Hold, GAM-10846 blocker, gaming Slack ETA outstanding. Run 11 (2026-05-19): Score=7. Q3 deferral confirmed via 2 sources. Run 12 (2026-05-20): Score=7 stable. Additional corroboration: Luka Prsa (#tmp-romania-migration-gaming, 2026-05-18): 'Buy bonus ETA for June 1?' — third independent signal. PLAYER-102 remains On Hold. SD-003 times_suggested incremented to 3. Run 13 (2026-05-21): Score=7 stable. PLAYER-102 On Hold, gaming Slack Buy Bonus thread ongoing. ESCALATED. Run 13 (2026-05-21): Suppressed flag detected via Notion checkbox readback."
+    },
+    {
+      "id": "RR-012",
+      "comments_posted": [],
+      "title": "PLAYER-220 — partial delivery, 50d overdue (2 Done, 1 Backlog — MANAGE-1290 not started)",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "overdue_50d",
+        "partial_delivery"
+      ],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 2,
+      "trend": "↓",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-220"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": -50,
+      "planned_release_date": "2026-03-31",
+      "notion_page_id": "353032f852c5818faf57c7b0ee762d09",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 13,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "partial_delivery"
+      },
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Score=2 stable. Run 11 (2026-05-19): Score=2 stable. Run 12 (2026-05-20): Score=2 stable. DQ flag remains (50d overdue, MANAGE-1290 Backlog). Run 13 (2026-05-21): Score=0 (DQ). partial_delivery: PLAYER-1543 in Backlog, 3 children Done/Won't Do."
+    },
+    {
+      "id": "RR-013",
+      "comments_posted": [
+        {
+          "jira_key": "PLAYER-1177",
+          "date": "2026-05-07",
+          "run_number": 5
+        },
+        {
+          "jira_key": "PLAYER-1177",
+          "date": "2026-05-15",
+          "run_number": 9
+        }
+      ],
+      "title": "PLAYER-1177 — Auto Payments Buckets Config, release May 29",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1177"
+      ],
+      "product_lead": "George Staicu",
+      "engineering_lead": "Litha Hari",
+      "days_to_release": 9,
+      "planned_release_date": "2026-05-29",
+      "notion_page_id": "356032f852c58110a22bf3e1df8c4267",
+      "first_seen": "2026-05-04",
+      "last_seen": "2026-05-21",
+      "occurrences": 11,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue"
+      },
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Score=2. Run 11 (2026-05-19): Score=2 stable. In Delivery, release May 29, 10d. Run 12 (2026-05-20): Score=0 ↓. PLAYER-1177 not found in Romania initiative scan this run. consecutive_misses=1 → Resolved. Run 13 (2026-05-21): RE-ACTIVATED (was Resolved, misses=1). FPT-245 In Review. consecutive_misses reset to 0."
+    },
+    {
+      "id": "RR-014",
+      "comments_posted": [],
+      "title": "PLAYER-11 Fraud Prevention — PLAYER-1361 blocker In Delivery, 23d to release",
+      "category": "scope",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "blocker_in_delivery"
+      ],
+      "slack_threads": [],
+      "score": 1,
+      "score_last_run": 1,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "Escalated",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-11"
+      ],
+      "product_lead": null,
+      "engineering_lead": "Lalit Medarametla",
+      "days_to_release": 23,
+      "planned_release_date": "2026-06-12",
+      "notion_page_id": "356032f852c5817a8ac9d30797e7a08d",
+      "first_seen": "2026-05-04",
+      "last_seen": "2026-05-21",
+      "occurrences": 11,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "child_epics": [
+          "FPT-194 (In Progress)",
+          "FPT-285 (Awaiting Delivery)",
+          "FPT-225 (Awaiting Delivery)",
+          "FPT-60 (Done)",
+          "FPT-59 (Done)",
+          "FPT-58 (Done)"
+        ],
+        "note": "FPT-194 actively In Progress. PLAYER-1361 blocker still In Delivery."
+      },
+      "blockers": [
+        "PLAYER-1361"
+      ],
+      "notes": "Run 11 (2026-05-19): Score=1 stable. PLAYER-1361 confirmed In Delivery. blocker_in_delivery(1)×1.5(24d)=1. Run 12 (2026-05-20): Score=1 stable. days_to_release updated to 23 (Jun 12 - May 20). Run 13 (2026-05-21): Score=1. In Delivery, 22d, fresh. Escalated status maintained."
+    },
+    {
+      "id": "RR-015",
+      "comments_posted": [
+        {
+          "jira_key": "PLAYER-80",
+          "date": "2026-05-07",
+          "run_number": 5
+        }
+      ],
+      "title": "PLAYER-80 — Dynamic Control Groups, release date stale past, now 8d stale in delivery",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_progress_overdue",
+        "stale_7d_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-80"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": -34,
+      "planned_release_date": "2026-04-15",
+      "notion_page_id": "356032f852c581b787f2de082503f63a",
+      "first_seen": "2026-05-04",
+      "last_seen": "2026-05-21",
+      "occurrences": 11,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "note": "PLAYER-80 In Delivery, updated 2026-05-12 (8d stale as of 2026-05-20). Active delivery — date needs updating."
+      },
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Score=0 stable. Run 11 (2026-05-19): Score=0. Active delivery, not yet stale. Run 12 (2026-05-20): Score=2 ↑. PLAYER-80 last updated 2026-05-12 — now 8d stale, crossed 7d threshold. stale_7d_delivery(2)×1.0(overdue)=2. Run 13 (2026-05-21): Score=2. 9d stale in delivery (in_progress_overdue)."
+    },
+    {
+      "id": "RR-016",
+      "comments_posted": [],
+      "title": "SPORTS-562 — Romania migration, CPR discussion signal",
+      "category": "technical",
+      "sources": [
+        "jira",
+        "slack",
+        "cpr"
+      ],
+      "signals": [
+        "cpr_discussion_signal"
+      ],
+      "slack_threads": [],
+      "score": 1,
+      "score_last_run": 1,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "SOC",
+      "jira_issues": [
+        "SPORTS-562"
+      ],
+      "product_lead": "Chris Chiaro",
+      "engineering_lead": "Chris Chiaro",
+      "days_to_release": 37,
+      "planned_release_date": "2026-06-26",
+      "notion_page_id": "358032f852c581209c33fdfdd6838897",
+      "first_seen": "2026-05-06",
+      "last_seen": "2026-05-21",
+      "occurrences": 10,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Score=1. Run 11 (2026-05-19): Score=0 ↓. SPORTS-562 updated TODAY, May 11 thread outside window. Run 12 (2026-05-20): Score=1 ↑. CPR/Notion discussion signal detected for SPORTS-562. Single CPR mention. cpr_signal(1)×1.25(37d)=1.25→1. Run 13 (2026-05-21): Score=1. Fresh update today, 36d to prd."
+    },
+    {
+      "id": "RR-017",
+      "comments_posted": [],
+      "title": "GAM-8800 — Romania migration Health At Risk, REOPENED — 7d stale, 9d to release",
+      "category": "technical",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_7d_delivery",
+        "release_imminent"
+      ],
+      "slack_threads": [],
+      "score": 4,
+      "score_last_run": 4,
+      "trend": "→",
+      "severity": "medium",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-8800"
+      ],
+      "product_lead": "Sharon Zahra",
+      "engineering_lead": "Oscar Van Ruiten",
+      "days_to_release": 8,
+      "planned_release_date": "2026-05-29",
+      "notion_page_id": "358032f852c581c6a487cad897bced73",
+      "first_seen": "2026-05-06",
+      "last_seen": "2026-05-21",
+      "occurrences": 6,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. GAM-8800 In Delivery, 10d to release (May 29). Updated 2026-05-13. No signals this run. Run 12 (2026-05-20): REOPENED. GAM-8800 last updated 2026-05-13 — now 7d stale (threshold crossed). Release May 29 = 9d away. stale_7d_delivery(2)×2.0(≤14d)=4. consecutive_misses reset to 0. occurrences=5. Run 13 (2026-05-21): Score=4. 8d stale x 2.0 (8d proximity) = 4."
+    },
+    {
+      "id": "RR-018",
+      "comments_posted": [],
+      "title": "Account inactivity timer — cutover timing risk for near-inactive players",
+      "category": "technical",
+      "sources": [
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "Closed",
+      "workstream": "MANAGE",
+      "jira_issues": [
+        "MANAGE-1309"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "notion_page_id": "35d032f852c581299ed5ffa589db2ffb",
+      "first_seen": "2026-05-07",
+      "last_seen": "2026-05-12",
+      "occurrences": 3,
+      "consecutive_misses": 3,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Closed. MANAGE-1309 Done."
+    },
+    {
+      "id": "RR-019",
+      "comments_posted": [
+        {
+          "jira_key": "PLT-330",
+          "date": "2026-05-20",
+          "run_number": 12
+        }
+      ],
+      "title": "PLT-330 — wallet header missing on stage.superbet.ro, Day-1 migration risk",
+      "category": "technical",
+      "sources": [
+        "jira",
+        "slack",
+        "cpr"
+      ],
+      "signals": [
+        "external_slack_day1_risk",
+        "notion_at_risk",
+        "cross_source_bonus"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/CP11BEX7C/p1779183124847519",
+          "channel": "#web--dev",
+          "summary": "Juraj Ilic (2026-05-19): x-sb-wallet-override header not being sent by stage.superbet.ro. All of these concerns make it hard for us to plan the actual migration."
+        }
+      ],
+      "score": 3,
+      "score_last_run": 5,
+      "trend": "↓",
+      "severity": "medium",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLT",
+      "jira_issues": [
+        "PLT-330"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": "35e032f852c58128a733caf3281caade",
+      "first_seen": "2026-05-11",
+      "last_seen": "2026-05-21",
+      "occurrences": 8,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=1. PLT-330 updated TODAY. BATCH_07 active, upscaling. missing_ssu(1)×1.0=1. Run 12 (2026-05-20): Score=5 ↑↑. NEW EXTERNAL SIGNAL: Juraj Ilic (#web--dev, 2026-05-19): 'x-sb-wallet-override header not being sent by stage.superbet.ro. All of these concerns make it hard for us to plan the actual migration.' Notion CPR confirmed PLT-330 At Risk (2026-05-08). Scoring: external_slack(2)+notion_at_risk(1)×1.0+cross_source(+2)=5. Jira comment qualifying. Run 13 (2026-05-21): Score=3 (was 5). Fresh update today, staleness cleared."
+    },
+    {
+      "id": "RR-020",
+      "comments_posted": [],
+      "title": "DAP-36 CRM data migration — scope undefined, stale in delivery (21d)",
+      "category": "scope",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_delivery",
+        "scope_undefined"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "DAP",
+      "jira_issues": [
+        "DAP-36"
+      ],
+      "product_lead": null,
+      "engineering_lead": "Tanja Zidic",
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": "35e032f852c581e09042d6dc3814e0e1",
+      "first_seen": "2026-05-11",
+      "last_seen": "2026-05-21",
+      "occurrences": 8,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=2 stable. DAP-36 In Delivery, updated 2026-04-29 (20d stale). Run 12 (2026-05-20): Score=2 stable. Now 21d stale. Run 13 (2026-05-21): Score=2. 22d stale in delivery."
+    },
+    {
+      "id": "RR-021",
+      "comments_posted": [],
+      "title": "PLAYER-218 — in progress overdue, active delivery (MANAGE-1226 + MANAGE-1210 In Progress)",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_progress_overdue"
+      ],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-218"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": -50,
+      "planned_release_date": "2026-03-31",
+      "notion_page_id": "35e032f852c5819e8e67d47af6374e5a",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 13,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "in_progress_epics": [
+          "MANAGE-1226 (In Progress)",
+          "MANAGE-1210 (In Progress)"
+        ],
+        "done_epics": [
+          "MANAGE-1343 (Won't Do)",
+          "MANAGE-1329 (Done)",
+          "MANAGE-1292 (Done)",
+          "MANAGE-1288 (Done)",
+          "MANAGE-1287 (Won't Do)",
+          "MANAGE-1286 (Won't Do)",
+          "MANAGE-1285 (Done)",
+          "MANAGE-1225 (Won't Do)",
+          "MANAGE-1224 (Done)",
+          "MANAGE-1223 (Done)"
+        ],
+        "label_stamped": false,
+        "note": "2 epics actively In Progress. Updated 2026-05-18. Active delivery — DQ only."
+      },
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=0 stable. PLAYER-218 updated 2026-05-18. Active delivery. Run 12 (2026-05-20): Score=0 stable. DQ flag remains. Run 13 (2026-05-21): Score=0 (DQ). MANAGE-1226 In Progress."
+    },
+    {
+      "id": "RR-022",
+      "comments_posted": [],
+      "title": "PLAYER-82 — date stale past (36d), BCN-7345 still In Progress (DQ)",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "overdue",
+        "stale_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-82"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": -36,
+      "planned_release_date": "2026-04-14",
+      "notion_page_id": "35e032f852c581538e41c63d1d157915",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 13,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "in_progress_epic": "BCN-7345",
+        "note": "BCN-7345 In Progress — delivery in progress. PLAYER-82 updated 2026-05-04 (16d stale). Date needs updating (DQ)."
+      },
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=2 stable. PLAYER-82 updated 2026-05-04 (15d stale). Run 12 (2026-05-20): Score=2 stable. Now 16d stale. DQ flag. Run 13 (2026-05-21): Score=2. 17d stale, in_progress_overdue."
+    },
+    {
+      "id": "RR-023",
+      "comments_posted": [],
+      "title": "PLAYER-172 — Automatic POA Verification, stale 9d in delivery, 12d to June 1 release",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_7d_delivery",
+        "release_imminent"
+      ],
+      "slack_threads": [],
+      "score": 6,
+      "score_last_run": 4,
+      "trend": "↑",
+      "severity": "high",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-172"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 11,
+      "planned_release_date": "2026-06-01",
+      "notion_page_id": "35e032f852c581b680fafab1cf0d7524",
+      "first_seen": "2026-05-01",
+      "last_seen": "2026-05-21",
+      "occurrences": 10,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress",
+        "note": "PLAYER-172 In Delivery. Last updated 2026-05-11 (9d stale as of May 20). Release 2026-06-01 = 12d away."
+      },
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): REOPENED. Score=4. In Delivery, release Jun 1 (13d), stale 8d. stale_7d(2)×2.0(13d)=4. Run 12 (2026-05-20): Score=4 stable. days_to_release=12 (Jun 1 - May 20). Now 9d stale. Release in 12d = ≤14d window → ×2.0. stale_7d(2)×2.0=4. Run 13 (2026-05-21): Score=6 (was 4). 10d stale(2)+child Backlog(1)=3 x 2.0 (11d proximity)."
+    },
+    {
+      "id": "RR-024",
+      "comments_posted": [],
+      "title": "PLAYER-1067 — date stale past, BCN-8949 in progress (DQ)",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_progress_overdue"
+      ],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1067"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": -33,
+      "planned_release_date": "2026-04-17",
+      "notion_page_id": "35e032f852c581bea384d75f2fcbe66a",
+      "first_seen": "2026-05-04",
+      "last_seen": "2026-05-21",
+      "occurrences": 11,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "in_progress_epics": [
+          "BCN-8949 (In Progress)"
+        ],
+        "note": "BCN-8949 In Progress. PLAYER-1067 updated 2026-05-18 (staleness cleared)."
+      },
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=0. Updated 2026-05-18 — staleness cleared. Run 12 (2026-05-20): Score=0 stable. Active delivery. DQ only. Run 13 (2026-05-21): Score=0 (DQ). BCN-8949 In Progress."
+    },
+    {
+      "id": "RR-025",
+      "comments_posted": [],
+      "title": "PLAYER-1293 — date stale past, MANAGE-2606 in progress (DQ)",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_progress_overdue"
+      ],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 0,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1293"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": -33,
+      "planned_release_date": "2026-04-17",
+      "notion_page_id": "35e032f852c581c0b949c9dd088b686a",
+      "first_seen": "2026-05-04",
+      "last_seen": "2026-05-21",
+      "occurrences": 11,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "in_progress_epics": [
+          "MANAGE-2606 (In Progress)"
+        ],
+        "note": "MANAGE-2606 In Progress. PLAYER-1293 updated 2026-05-18 (staleness cleared)."
+      },
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=0. Updated 2026-05-18 — staleness cleared. Run 12 (2026-05-20): Score=0 stable. Active delivery. DQ only. Run 13 (2026-05-21): Score=0 (DQ). MANAGE-2606 In Progress."
+    },
+    {
+      "id": "RR-026",
+      "comments_posted": [],
+      "title": "Bonus blockage — Betler product restriction treated as bonus block, unresolved",
+      "category": "technical",
+      "sources": [
+        "slack"
+      ],
+      "signals": [],
+      "slack_threads": [],
+      "score": 0,
+      "score_last_run": 4,
+      "trend": "↓",
+      "severity": "low",
+      "impact": "medium",
+      "status": "Closed",
+      "workstream": "PLAYER",
+      "jira_issues": [],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": "364032f852c581e1aa25fcc09b6dab3c",
+      "first_seen": "2026-05-13",
+      "last_seen": "2026-05-18",
+      "occurrences": 2,
+      "consecutive_misses": 2,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): REOPENED. Score=4. Niels 'Betler treats any product restriction as bonus block'. Run 11 (2026-05-19): Score=0. May 12 Slack thread outside 7d window. consecutive_misses=1 → Resolved. Run 12 (2026-05-20): Score=0. Not seen again. consecutive_misses=2 → Closed."
+    },
+    {
+      "id": "RR-027",
+      "comments_posted": [],
+      "title": "PLAYER-992 — Launch Redundant Cards in Betler, stale 26d in delivery, overdue",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_progress_overdue",
+        "stale_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-992"
+      ],
+      "product_lead": "Joe Mullally",
+      "engineering_lead": "Emanuele Manco",
+      "days_to_release": -20,
+      "planned_release_date": "2026-04-30",
+      "notion_page_id": "360032f852c5810a9655c25af325d486",
+      "first_seen": "2026-05-13",
+      "last_seen": "2026-05-21",
+      "occurrences": 6,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "in_progress_epic": "CASH-1661",
+        "note": "CASH-1661 'Launch Napoleon RO with Checkout' In Progress. PLAYER-992 not updated since 2026-04-24 (26d stale). Date needs updating."
+      },
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=2 stable. PLAYER-992 25d stale. Run 12 (2026-05-20): Score=2 stable. Now 26d stale. DQ flag. Run 13 (2026-05-21): Score=2. 27d stale, CASH-2584 In Progress."
+    },
+    {
+      "id": "RR-028",
+      "comments_posted": [],
+      "title": "SOC-3527 — RO Social Betler migration, stale 19d in delivery, health missing",
+      "category": "data_quality",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_19d_delivery",
+        "missing_health"
+      ],
+      "slack_threads": [],
+      "score": 3,
+      "score_last_run": 3,
+      "trend": "→",
+      "severity": "medium",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "SOC",
+      "jira_issues": [
+        "SOC-3527"
+      ],
+      "product_lead": "Mario Loncar",
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": "361032f852c581b48be0d45797ac787a",
+      "first_seen": "2026-05-15",
+      "last_seen": "2026-05-21",
+      "occurrences": 5,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": {
+        "classification": "in_progress_overdue",
+        "note": "SOC-3527 In Delivery. Last updated 2026-05-01 (19d stale — worsening). No release date. Health field missing."
+      },
+      "blockers": [],
+      "notes": "Run 9 (2026-05-15): NEW. Score=3. Run 10 (2026-05-18): Score=3 stable. 14d stale. Run 11 (2026-05-19): Score=3 stable. 18d stale. Run 12 (2026-05-20): Score=3 stable. Now 19d stale (worsening). Health still missing. No Slack/CPR signals — staleness alone, no comment trigger. Run 13 (2026-05-21): Score=3. 20d stale in delivery."
+    },
+    {
+      "id": "RR-029",
+      "comments_posted": [
+        {
+          "jira_key": "GAM-10668",
+          "date": "2026-05-18",
+          "run_number": 10
+        },
+        {
+          "jira_key": "GAM-10668",
+          "date": "2026-05-20",
+          "run_number": 12
+        }
+      ],
+      "title": "GAM-10668 — Bragg FS RO Nap, Slack-blocked, 9d to release (May 29)",
+      "category": "timeline",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [
+        "slack_blocked",
+        "cross_source_bonus",
+        "release_imminent"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C08FSV38EJK/p1779096785627009",
+          "channel": "#content-engagement-integrations-sync",
+          "summary": "Majid Rodriguez (2026-05-18): 'Bragg FS RO Nap: Issues with transaction history and reporting accuracy. Blocked due to other priorities.' Gaming Rewards weekly update."
+        }
+      ],
+      "score": 4,
+      "score_last_run": 6,
+      "trend": "↓",
+      "severity": "medium",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-10668"
+      ],
+      "product_lead": "Sharon Zahra",
+      "engineering_lead": null,
+      "days_to_release": 8,
+      "planned_release_date": "2026-05-29",
+      "notion_page_id": "361032f852c5817c9266c6e59f92ff75",
+      "first_seen": "2026-05-15",
+      "last_seen": "2026-05-21",
+      "occurrences": 5,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": true,
+      "suppressed_by": "notion-checkbox-run13",
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 10 (2026-05-18): Score=10. CRITICAL. In Planning, 40d stale, 11d to release. Run 11 (2026-05-19): Score=2 ↓↓. Moved to In Delivery today. Run 12 (2026-05-20): Score=6 ↑. HIGH. External Slack: Majid Rodriguez (#content-engagement-integrations-sync, 2026-05-18): 'Bragg FS RO Nap: Issues with transaction history and reporting accuracy. Blocked due to other priorities.' Cross-source corroboration (Jira In Delivery + Slack blocked signal). slack_blocked(2)×2.0(≤14d)+cross_source(+2)=6. Severity upgraded to High. 9d to May 29 release. Jira comment qualifying (new signal this run). Run 13 (2026-05-21): Score=4 (was 6). Fresh update May 20, 8d to prd. Run 13 (2026-05-21): Suppressed flag detected via Notion checkbox readback."
+    },
+    {
+      "id": "RR-030",
+      "comments_posted": [],
+      "title": "PLAYER-1041 — Romania Loyalty Migration, stale 20d pre-delivery, date slipped Jun4→Jun12",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_pre_delivery",
+        "missing_health",
+        "missing_ssu",
+        "date_slip"
+      ],
+      "slack_threads": [],
+      "score": 3,
+      "score_last_run": 4,
+      "trend": "↓",
+      "severity": "medium",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1041"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 23,
+      "planned_release_date": "2026-06-12",
+      "notion_page_id": "361032f852c5814f98aae11c522843ca",
+      "first_seen": "2026-05-15",
+      "last_seen": "2026-05-21",
+      "occurrences": 5,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=4 ↑. PLAYER-1041 In Discovery, 19d stale. Date slipped Jun 4→Jun 12. stale_pre_delivery(1)+missing_health(1)+missing_ssu(1)×1.5(24d)=4. Run 12 (2026-05-20): Score=4 stable. days_to_release=23 (Jun 12 - May 20). Now 20d stale (pre-delivery threshold 14d). Run 13 (2026-05-21): Score=3 (was 4). In Discovery, 22d, fresh."
+    },
+    {
+      "id": "RR-031",
+      "comments_posted": [],
+      "title": "DAP-42 — stale pre-delivery (62d), release Sep 2026",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_pre_delivery"
+      ],
+      "slack_threads": [],
+      "score": 1,
+      "score_last_run": 1,
+      "trend": "→",
+      "severity": "low",
+      "impact": "low",
+      "status": "open",
+      "workstream": "DAP",
+      "jira_issues": [
+        "DAP-42"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 104,
+      "planned_release_date": "2026-09-01",
+      "notion_page_id": "361032f852c5816c9405fa4c8fcf420a",
+      "first_seen": "2026-05-15",
+      "last_seen": "2026-05-21",
+      "occurrences": 5,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): Score=1 stable. DAP-42 In Planning, 61d stale. Run 12 (2026-05-20): Score=1 stable. Now 62d stale. 104d to Sep 1 release. Run 13 (2026-05-21): Score=1. In Planning, 103d."
+    },
+    {
+      "id": "RR-032",
+      "comments_posted": [],
+      "title": "GAM-10669 — Localisations + Aggregated Other Markets (Q2), stale 42d in To Do",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_pre_delivery",
+        "missing_ssu"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-10669"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 41,
+      "planned_release_date": "2026-06-30",
+      "notion_page_id": "366032f852c581a9ae87e800f90802d7",
+      "first_seen": "2026-05-19",
+      "last_seen": "2026-05-21",
+      "occurrences": 3,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 11 (2026-05-19): NEW. GAM-10669 To Do, 42d stale, release Jun 30. stale_pre_delivery(1)+missing_ssu(1)×1.25=2. Run 12 (2026-05-20): Score=2 stable. occurrences=2. Qualifies for Notion sync this run (occurrences≥2). Run 13 (2026-05-21): Score=2. To Do, 40d, stale 43d."
+    },
+    {
+      "id": "RR-033",
+      "comments_posted": [],
+      "title": "PLAYER-869 — CICO OTC Deposit, targeting June 3 PROD, SBClub/Data team dependencies",
+      "category": "timeline",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [
+        "stale_7d_delivery",
+        "missing_date",
+        "cross_source_bonus"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C0590TS6NET/p1778833222584709",
+          "channel": "#arcane-team",
+          "summary": "Nikola Đekić (2026-05-15): CICO OTC Deposit targeting June 3 before migration; risks noted around SBClub and Data team dependencies."
+        }
+      ],
+      "score": 3,
+      "score_last_run": 5,
+      "trend": "↓",
+      "severity": "medium",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-869"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. #arcane-team (Nikola Đekić, 2026-05-15): CICO OTC Deposit targeting June 3 PROD before migration; risks around SBClub and Data team. Jira has no release date (missing_date). Scoring: (stale_7d(2)+missing_date(1))×1.0(null date)+cross_source(+2)=5. Jira+Slack cross-source. Run 13 (2026-05-21): Score=3 (was 5). Fresh, active delivery, June 3 implied."
+    },
+    {
+      "id": "RR-034",
+      "comments_posted": [],
+      "title": "PLAYER-921 — System Limits AML, stale 14d In Delivery, Jun-30 (41d)",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_7d_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-921"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 41,
+      "planned_release_date": "2026-06-30",
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. PLAYER-921 In Delivery, 14d stale, release Jun 30 (41d). stale_7d(2)×1.25(31-60d)=2.5→2. Run 13 (2026-05-21): Score=2. In Delivery, fresh, 40d."
+    },
+    {
+      "id": "RR-035",
+      "comments_posted": [],
+      "title": "PLAYER-1063 — Integration Testing Payment, stale 22d In Delivery, Jun-30 (41d)",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1063"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 41,
+      "planned_release_date": "2026-06-30",
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. PLAYER-1063 In Delivery, 22d stale, release Jun 30 (41d). Integration Testing Payment stream. stale_7d(2)×1.25(31-60d)=2.5→2. Run 13 (2026-05-21): Score=2. 23d stale, no external signals."
+    },
+    {
+      "id": "RR-036",
+      "comments_posted": [],
+      "title": "PLAYER-1064 — Integration Testing Wallet, stale 26d In Delivery, no release date",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_delivery",
+        "missing_date"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 3,
+      "trend": "↓",
+      "severity": "low",
+      "impact": "high",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-1064"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. PLAYER-1064 In Delivery, 26d stale, no release date. Integration Testing Wallet stream. (stale_7d(2)+missing_date(1))×1.0(null date)=3. Run 13 (2026-05-21): Score=2 (was 3). 27d stale, no external signals."
+    },
+    {
+      "id": "RR-037",
+      "comments_posted": [],
+      "title": "PLAYER-169 — KYC Pro-active communication, stale 12d In Delivery, Jun-19 (30d)",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-169"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 30,
+      "planned_release_date": "2026-06-19",
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. PLAYER-169 In Delivery, 12d stale, release Jun 19 (30d). KYC Pro-active communication stream. stale_7d(2)×1.25(31-60d boundary)=2.5→2. Run 13 (2026-05-21): Score=2. 13d stale, no external signals."
+    },
+    {
+      "id": "RR-038",
+      "comments_posted": [],
+      "title": "GAM-8604 — Romania Migration Gaming, stale 8d In Delivery, Sep-01 (104d)",
+      "category": "timeline",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "stale_7d_delivery"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 2,
+      "trend": "→",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-8604"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 104,
+      "planned_release_date": "2026-09-01",
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. GAM-8604 In Delivery, 8d stale, release Sep 1 2026 (104d). Romania Migration Gaming parent initiative. stale_7d(2)×1.0(>60d)=2. Run 13 (2026-05-21): Score=2. 9d stale, no external signals."
+    },
+    {
+      "id": "RR-039",
+      "comments_posted": [
+        {
+          "jira_key": "GAM-11474",
+          "date": "2026-05-21",
+          "run_number": 13,
+          "comment_id": "1266631"
+        }
+      ],
+      "title": "GAM-11474 — Hacksaw contract/audit risk, June 1 audit milestone (12d)",
+      "category": "compliance",
+      "sources": [
+        "slack"
+      ],
+      "signals": [
+        "slack_contract_risk",
+        "audit_timeline_risk"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C09UY82EE9L",
+          "channel": "#tmp-romania-migration-gaming",
+          "summary": "Niels De Winde (2026-05-19): GAM-11474 indicates risk that signed contracts may slip and impact June 1 audit readiness timeline."
+        }
+      ],
+      "score": 6,
+      "score_last_run": 4,
+      "trend": "↑",
+      "severity": "high",
+      "impact": "high",
+      "status": "Escalated",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-11474"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 11,
+      "planned_release_date": "2026-06-01",
+      "notion_page_id": "367032f852c581e4b141f10d5b6ee122",
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. Niels De Winde (#tmp-romania-migration-gaming, 2026-05-19): GAM-11474 indicates risk that signed contracts may slip and impact June 1 audit readiness timeline. Slack-sourced. June 1 = 12d. slack_risk(2)×2.0(≤14d)=4. Run 13 (2026-05-21): Score=6 (was 4). Slack thread(2)+risk language(1)=3 x 2.0 (11d to June 1 audit). ESCALATED."
+    },
+    {
+      "id": "RR-040",
+      "comments_posted": [],
+      "title": "GAM-10782 — G.Games Romania, Awaiting Delivery, all 7 child stories Backlog",
+      "category": "timeline",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [
+        "backlog_stalled",
+        "structural_delivery_gap",
+        "cross_source_bonus"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C09UY82EE9L",
+          "channel": "#tmp-romania-migration-gaming",
+          "summary": "Niels De Winde (2026-05-19): GAM-10782 remains Awaiting Delivery, all 7 child stories Backlog. Asked for recovery plan."
+        }
+      ],
+      "score": 4,
+      "score_last_run": 4,
+      "trend": "→",
+      "severity": "medium",
+      "impact": "high",
+      "status": "open",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-10782"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 8,
+      "planned_release_date": "2026-05-29",
+      "notion_page_id": null,
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. Niels De Winde (#tmp-romania-migration-gaming, 2026-05-19): GAM-10782 Awaiting Delivery, all 7 child stories remain Backlog — structural delivery gap. Cross-source: Jira status + Slack escalation. structural_gap(2)+cross_source(+2)=4. Run 13 (2026-05-21): Score=4. Now In Progress (was Awaiting), 8d to prd. Slack mention."
+    },
+    {
+      "id": "RR-041",
+      "comments_posted": [
+        {
+          "jira_key": "GAM-11319",
+          "date": "2026-05-21",
+          "run_number": 13,
+          "comment_id": "1266630"
+        }
+      ],
+      "title": "GAM-11319 — Spribe/Bragg Aggregator, Blocked, Day-1 risk",
+      "category": "technical",
+      "sources": [
+        "jira",
+        "slack"
+      ],
+      "signals": [
+        "jira_blocked",
+        "slack_day1_risk",
+        "cross_source_bonus"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C09UY82EE9L/p1779174561772109",
+          "channel": "#tmp-romania-migration-gaming",
+          "summary": "Niels De Winde (2026-05-19): GAM-11319 moved Backlog→Blocked. Queried cause of blocker."
+        },
+        {
+          "url": "https://superbet.slack.com/archives/C08FSV38EJK",
+          "channel": "#content-engagement-integrations-sync",
+          "summary": "Sharon Zahra (2026-05-14): Bragg: Spribe — slow replies from Spribe, Day-1 risk flagged."
+        }
+      ],
+      "score": 10,
+      "score_last_run": 5,
+      "trend": "↑",
+      "severity": "high",
+      "impact": "high",
+      "status": "Escalated",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-11319"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 8,
+      "planned_release_date": "2026-05-29",
+      "notion_page_id": "367032f852c5817b854cde5994253c2d",
+      "first_seen": "2026-05-20",
+      "last_seen": "2026-05-21",
+      "occurrences": 2,
+      "consecutive_misses": 0,
+      "new_this_run": false,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 12 (2026-05-20): NEW. GAM-11319 Spribe/Bragg aggregator moved to Blocked. Niels (#tmp-romania-migration-gaming, 2026-05-19) flagged blocker. Sharon Zahra (#content-engagement-integrations-sync, 2026-05-14): 'slow replies from Spribe, Day-1 risk.' SD-004 suggested: possible dependency on GAM-10668 (both Bragg ecosystem, both blocked signals this week). jira_blocked(2)+slack_day1_signal(1)×1.0+cross_source(+2)=5. Run 13 (2026-05-21): Score=10 (was 5). Blocked(3)+Slack signals(2)=5 x 2.0 (8d to May 29). ESCALATED."
+    },
+    {
+      "id": "RR-042",
+      "comments_posted": [],
+      "title": "GAM-10333 — Playson Direct Integration, In Delivery, May 29 deadline (8d)",
+      "category": "technical",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_delivery_proximity"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 0,
+      "trend": "🆕",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "GAM",
+      "jira_issues": [
+        "GAM-10333"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 8,
+      "planned_release_date": "2026-05-29",
+      "notion_page_id": null,
+      "first_seen": "2026-05-21",
+      "last_seen": "2026-05-21",
+      "occurrences": 1,
+      "consecutive_misses": 0,
+      "new_this_run": true,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 13 (2026-05-21): NEW. GAM-10333 Playson Direct Integration, In Delivery, prd=2026-05-29 (8d). Updated 2026-05-15 (6d, below stale threshold). Proximity signal score=2."
+    },
+    {
+      "id": "RR-043",
+      "comments_posted": [],
+      "title": "Online Betslip Ticket Search — performance/scalability risk, 600k queries/month, no Jira initiative",
+      "category": "technical",
+      "sources": [
+        "slack"
+      ],
+      "signals": [
+        "slack_performance_risk"
+      ],
+      "slack_threads": [
+        {
+          "url": "https://superbet.slack.com/archives/C088XJ978ES/p1779261085",
+          "channel": "#ip-romania-discussions",
+          "summary": "Niels De Winde (2026-05-21): Flagged Online Betslip Ticket Search scalability concern — 600k queries/month expected at launch, no Jira initiative tracking it."
+        }
+      ],
+      "score": 2,
+      "score_last_run": 0,
+      "trend": "🆕",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "notion_page_id": null,
+      "first_seen": "2026-05-21",
+      "last_seen": "2026-05-21",
+      "occurrences": 1,
+      "consecutive_misses": 0,
+      "new_this_run": true,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 13 (2026-05-21): NEW. No Jira initiative found. Niels De Winde (#ip-romania-discussions, 2026-05-21): Online Betslip Ticket Search 600k queries/month — scalability concern. Slack-only signal, score=2."
+    },
+    {
+      "id": "RR-044",
+      "comments_posted": [],
+      "title": "PLAYER-105 — Pragmatic Countdown FS, In Delivery, June 2 deadline (12d)",
+      "category": "technical",
+      "sources": [
+        "jira"
+      ],
+      "signals": [
+        "in_delivery_proximity"
+      ],
+      "slack_threads": [],
+      "score": 2,
+      "score_last_run": 0,
+      "trend": "🆕",
+      "severity": "low",
+      "impact": "medium",
+      "status": "open",
+      "workstream": "PLAYER",
+      "jira_issues": [
+        "PLAYER-105"
+      ],
+      "product_lead": null,
+      "engineering_lead": null,
+      "days_to_release": 12,
+      "planned_release_date": "2026-06-02",
+      "notion_page_id": null,
+      "first_seen": "2026-05-21",
+      "last_seen": "2026-05-21",
+      "occurrences": 1,
+      "consecutive_misses": 0,
+      "new_this_run": true,
+      "suppressed": false,
+      "suppressed_by": null,
+      "mitigation_action": "",
+      "mitigation_owner": "",
+      "mitigation_target_date": null,
+      "mitigation_status": "none",
+      "epic_context": null,
+      "blockers": [],
+      "notes": "Run 13 (2026-05-21): NEW. PLAYER-105 Pragmatic Countdown FS, In Delivery, prd=2026-06-02 (12d). Proximity amplifier x2.0. Base signal=1 x 2.0=2."
+    }
+  ],
+  "last_slack_digest": {
+    "run_number": 13,
+    "date": "2026-05-21",
+    "channel": "C0B0MB0Q4KD",
+    "message_ts": "1779349361.038579",
+    "url": "https://superbet.slack.com/archives/C0B0MB0Q4KD/p1779349361038579"
+  }
+}
