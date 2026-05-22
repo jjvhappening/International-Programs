@@ -18,8 +18,9 @@ ToolSearch: select:mcp__3da07a3d-3738-4c02-999f-340a5e731aae__notion-fetch,mcp__
 ```
 
 Also read these reference files before Phase 1 to avoid runtime lookup round-trips:
-- Notion schema: `C:\Users\JonVince\Documents\Claude\Projects\International Programs\RO Migration to Betler\references\notion-risk-register-schema.md`
-- Slack channel IDs: `C:\Users\JonVince\Documents\Claude\Projects\International Programs\RO Migration to Betler\references\slack-channels.md`
+- Notion schema: `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\references\notion-risk-register-schema.md`
+- Slack channel IDs: `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\references\slack-channels.md`
+- Risk register: `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\risk-register.json`
 
 ---
 
