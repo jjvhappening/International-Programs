@@ -24,6 +24,8 @@ project: RO Migration to Betler
 | #tmp-romania-migration-testing | `C0AR5US8NVB` | 2026-05-22 | Regression testing coordination — payment issues, geolocation, audit readiness |
 | #tmp-romania-migration-manage | `C09V3RK2LNQ` | 2026-05-22 | Manage tribe — dormant accounts, KYC, ONJN compliance threads |
 | #tmp-romania-migration-sports | `C09UJRW8K7H` | 2026-05-22 | Sports tribe migration — iCore import fixes, stage cutover |
+| #manage-romania-migration | `C0AQ62VC5HT` | 2026-05-22 | Manage tribe broader channel — dormant accounts, KYC/ONJN overlap |
+| #seon-romania-aml-migration | `C0AFMF7QW06` | 2026-05-22 | SEON AML integration — Romania AML migration signals |
 
 ## Digest output channel
 
