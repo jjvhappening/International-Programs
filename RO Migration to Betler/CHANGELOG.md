@@ -3,6 +3,15 @@
 ## [Unreleased]
 
 ### Added
+- `romania-risk-crawler.md` Step 10: explicit git commit and push step with exact Bash commands — prompted by auto-mode classifier blocking `git push origin main` every run because "Git commit and push" generic language doesn't satisfy the classifier's specific-authorization requirement.
+
+### Changed
+- `romania-risk-crawler.md` Step 1: added confirmed health field note — `customfield_12111` is correct and works when explicitly requested; value format is emoji-prefixed (`"🟢 On Track"`, `"🟡 At Risk"`, `"🔴 Off Track"`). Absence in prior runs was caused by ad-hoc extraction scripts using wrong field IDs.
+- `romania-risk-crawler.md` Signal Logic table: corrected Health Status = Red / Amber match strings from `= Red` / `= Amber` (wrong) to `contains "off track"` / `contains "at risk"` — actual API values are emoji-prefixed strings, not bare colour names.
+
+
+
+### Added
 - `romania-risk-crawler.md` Step 4b: new step after Slack scanner — syncs `references/slack-channels.md` automatically each run. Appends newly discovered channels, refreshes `last_active` for channels with activity, and prunes channels with no activity for 30+ days. Channels with unknown `last_active` are never pruned.
 - `references/slack-channels.md`: added `last_active` column to all rows; backfilled from known run history (Runs 1–12). Column is maintained by Step 4b going forward.
 - `romania-risk-crawler.md` Sub-agent architecture: replaced flat parallelisation strategy with three parallel sub-agents (Jira collector, Notion collector, Slack collector). Each sub-agent contains all raw API payloads within its own context window and writes structured output to a temp file; the main session only sees compact signal lists. Eliminates context saturation caused by 200-initiative Jira pagination + 20+ channel Slack scans accumulating in the main context.

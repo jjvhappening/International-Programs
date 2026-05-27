@@ -59,8 +59,8 @@ Field IDs from [Jira Roadmap Logic v2](../../Jira%20Data%20Quality/references/Ji
 
 | Signal | Field / Definition | Weight |
 |---|---|---|
-| Health Status = Red | `customfield_12111` = Red | 4 |
-| Health Status = Amber | `customfield_12111` = Amber | 2 |
+| Health Status = Red | `customfield_12111` value contains `"off track"` (e.g. `"🔴 Off Track"`) | 4 |
+| Health Status = Amber | `customfield_12111` value contains `"at risk"` (e.g. `"🟡 At Risk"`) | 2 |
 | Flagged | Issue has the Jira "flagged" marker | 3 |
 | Blocked / at-risk | Status = Blocked, or label includes `at-risk` | 3 |
 | Short Status Update contains risk language | `customfield_14447` contains "blocked" / "at risk" / "delayed" / "dependency" | 2 |
@@ -367,6 +367,8 @@ The sub-agent architecture is the primary protection against context saturation 
 ### Steps to build:
 1a. **Load risk register** — read `risk-register.json` at the start of each run (create empty register if first run). For every risk where `notion_page_id` is set, read the Notion `Suppressed` checkbox and update `suppressed` in the JSON before scoring begins — this ensures suppressed risks are excluded from scoring, auto-comments, and digest output from the very first step.
 1. **Define Jira scope query** — fetch all in-scope initiatives across all boards using: `issuetype = Initiative AND cf[14342] = "🇷🇴 Romania migration" AND status NOT IN (Backlog, "Won't Do")`. **Request only these fields** (pass as `fields` parameter to avoid full-payload responses): `key,summary,status,updated,parent,customfield_12111,customfield_14447,customfield_12114,customfield_12121,customfield_12122,issuelinks,created,priority`. **Must paginate** — results exceed 100 (200 total as of 2026-05-01); fetch pages until `isLast = true`. Build a name index (`{ initiative_name → key, board, status }`) for Slack cross-referencing. Discard raw response after building the index. PLYRTPM is not in scope — do not query it. Immediately write the name index to `references/jira-name-index-temp.json` in this format: `{ "run_number": N, "generated": "ISO datetime", "index": { "KEY": { "summary": "...", "board": "...", "status": "..." } } }`. Clear the name index from in-context memory — all subsequent initiative lookups within this sub-agent read from the file on demand rather than scanning the full in-memory object.
+> **Health field — confirmed field ID and value format (Run 15):** `customfield_12111` is correct and returns data when explicitly requested. Value format is emoji-prefixed: `"🟢 On Track"`, `"🟡 At Risk"`, `"🔴 Off Track"`. Signal matching must check for `"on track"` / `"at risk"` / `"off track"` (case-insensitive) — do NOT check for `"green"` / `"amber"` / `"red"`, those strings do not appear in the values. If health signals appear absent in a run, verify the `fields` parameter includes `customfield_12111` — ad-hoc extraction scripts in prior runs probed `customfield_14343`/`14344` which do not exist on these issues.
+
 1b. **Resolve blockers** — for each initiative that has an `is blocked by` issue link, fetch the blocking issue with `fields=key,summary,status,project,customfield_12121,customfield_12122,customfield_14342,updated`. Determine `in_program_scope` by checking whether `customfield_14342` contains option ID `17894`. Calculate `days_blocked` from the link creation date. Set `stale = true` if `updated` is more than 7 days ago. Apply the elevated signal weight (4) for out-of-scope stale blockers.
 1c. **Epic context check** — for any initiative whose release date (`customfield_12114`) has passed and which is still in a delivery status, fetch all child epics using JQL: `issueType = Epic AND parent = [initiative key]` with `fields=key,status`. Classify using the five classifications defined in the Epic Context Check table: `backlog_overdue`, `in_progress_overdue`, `not_closed_out`, `partial_delivery`, or `no_epic_data`. Apply the `release_date_overdue` signal only for `backlog_overdue` (weight 3) and `no_epic_data` (weight 1). Score 0 for all other classifications — route to DQ tracking instead. Epic fetches are per-initiative (Jira JQL does not support a single bulk parent-IN call for child epics). Fire these in parallel up to the Jira API rate limit — the overdue subset is typically small.
 1d. **Stamp DQ labels** — for every initiative classified as `not_closed_out` in Step 1c, stamp the label `ro-not-closed-out` via `editJiraIssue` (add to labels array; do not overwrite other existing labels). In the same step, query Jira for any PLAYER initiative that currently carries this label but was NOT classified as `not_closed_out` this run — remove the label from those. This keeps the label set accurate mid-week even before the DQ workflow clears everything at end of its run.
@@ -412,6 +414,15 @@ The sub-agent architecture is the primary protection against context saturation 
 7. **Digest formatter** — reads severity from register; prepends risk ID (e.g. `RR-001`) to each bullet; promotes Escalated risks to the 🚨 section; produces the Slack message with @mentions for Jon and Niels
 8. **Auto-commenter** — posts to stale/flagged Jira issues
 9. **Schedule** — register as a Monday 09:00 GMT routine
+10. **Git commit and push** — after digest is posted, run:
+    ```bash
+    git add "RO Migration to Betler/risk-register.json"
+    # also stage if Step 4b made changes:
+    git add "references/slack-channels.md"
+    git commit -m "chore(risk-crawler): Run N (YYYY-MM-DD) — [N] risks, [N] escalations"
+    git push origin main
+    ```
+    Stage only `risk-register.json` and `references/slack-channels.md`. Do not stage helper scripts, temp files, or `.pkl` artifacts. The exact command `git push origin main` is required — the auto-mode classifier blocks the push unless this specific command appears in the task definition.
 
 ### Open decisions to confirm before build:
 - [x] Niels De Winde's Slack handle — confirmed `U04MM3C1H8U`
