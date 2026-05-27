@@ -1,15 +1,22 @@
 """
-Romania Risk Crawler — Register Eval Harness
-Runs structural, regression, and trend evals against risk-register.json.
+Romania Risk Crawler — Register & Digest Eval Harness
+Runs structural, regression, trend, and digest format evals.
+
 Usage:
-    python validate_register.py [--prev <path-to-previous-register>]
-    python validate_register.py --auto-prev  # uses git HEAD version automatically
+    # Validate register only (post-commit, compares against HEAD~1):
+    python validate_register.py --auto-prev
+
+    # Validate a digest message file before posting:
+    python validate_register.py --digest digest.txt
+
+    # Both together:
+    python validate_register.py --auto-prev --digest digest.txt
 
 Exit codes:
     0 — all evals passed
     1 — one or more evals failed
 """
-import sys, json, subprocess, argparse, os
+import sys, json, subprocess, argparse, os, re
 from datetime import datetime, date
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -27,27 +34,44 @@ def load_json(path):
 
 
 def get_prev_register_from_git():
-    """Fetch the previous committed version of risk-register.json.
+    """Fetch the most recent committed version of risk-register.json with a
+    DIFFERENT run_number than the current working copy.
 
-    Uses HEAD~1 by default so the eval can run correctly after a commit
-    (HEAD contains the current run; HEAD~1 contains the previous run).
-    Falls back to HEAD if HEAD~1 doesn't exist (first commit on this file).
+    Walks back through git history for this specific file until it finds a
+    commit where run_number differs — handles the common case of multiple
+    non-register commits landing after the run update (eval harness, cleanup, etc.).
     """
     repo_root = os.path.dirname(os.path.dirname(__file__))
     rel_path  = 'RO Migration to Betler/risk-register.json'
-    for ref in ('HEAD~1', 'HEAD'):
+
+    # Load current run_number for comparison
+    try:
+        current_run = load_json(REGISTER_PATH).get('run_number')
+    except Exception:
+        current_run = None
+
+    # Get the list of commits that touched this file
+    try:
+        log = subprocess.run(
+            ['git', 'log', '--format=%H', '--follow', '--', rel_path],
+            cwd=repo_root, capture_output=True, text=True, encoding='utf-8'
+        )
+        commits = log.stdout.strip().splitlines()
+    except Exception:
+        return None
+
+    for i, sha in enumerate(commits):
         try:
             result = subprocess.run(
-                ['git', 'show', f'{ref}:{rel_path}'],
-                cwd=repo_root,
-                capture_output=True, text=True, encoding='utf-8'
+                ['git', 'show', f'{sha}:{rel_path}'],
+                cwd=repo_root, capture_output=True, text=True, encoding='utf-8'
             )
-            if result.returncode == 0:
-                data = json.loads(result.stdout)
-                if ref == 'HEAD~1':
-                    print(f"  (using {ref} — previous commit)")
-                else:
-                    print(f"  (using {ref} — no HEAD~1 found)")
+            if result.returncode != 0:
+                continue
+            data = json.loads(result.stdout)
+            if current_run is None or data.get('run_number') != current_run:
+                label = 'HEAD' if i == 0 else f'HEAD~{i} ({sha[:7]})'
+                print(f"  (using {label} — run {data.get('run_number')} | {data.get('last_run')})")
                 return data
         except Exception:
             continue
@@ -308,15 +332,93 @@ def run_trend(runner, data):
                      f"score {score_last}→{score} should give trend='{expected}' but got '{trend}'")
 
 
+# ── Digest eval ────────────────────────────────────────────────────────────────
+
+# Matches a correctly markdown-linked Jira key: [PROJECT-123](https://...)
+_LINKED_KEY  = re.compile(r'\[([A-Z][A-Z0-9]+-\d+)\]\(https?://[^\)]+\)')
+# Matches any raw URL (to strip before bare-key scan)
+_RAW_URL     = re.compile(r'https?://\S+')
+# Matches any standalone Jira key pattern
+_JIRA_KEY    = re.compile(r'\b([A-Z][A-Z0-9]+-\d+)\b')
+
+# Project prefixes that are always primary subjects and MUST be linked in digests.
+# Keys from other prefixes appearing only in descriptive bullets are flagged as
+# warnings rather than failures — reviewers can decide whether to link them.
+PRIMARY_BOARDS = {'PLAYER', 'GAM', 'SPORTS', 'PLT', 'DAP', 'SOC', 'TRX', 'FPT',
+                  'MANAGE', 'CASH', 'BCN', 'CCD', 'PLYRTPM'}
+
+# Prefixes that match the Jira key pattern but are NOT Jira issue keys.
+# RR-XXX = internal risk register IDs; exclude from all hyperlink checks.
+NON_JIRA_PREFIXES = {'RR'}
+
+
+def _board(key: str) -> str:
+    return key.rsplit('-', 1)[0]
+
+
+def run_digest_eval(runner, message: str):
+    """Check that all Jira keys in a Slack digest message are hyperlinked.
+
+    Rules:
+    - Any key that appears as the primary subject of a bullet (bold or at start
+      of a table cell) MUST be linked → FAIL if bare.
+    - Any key in a supporting description sentence → WARN if bare (not a hard fail).
+    """
+    # Collect correctly linked keys
+    linked_keys = {m.group(1) for m in _LINKED_KEY.finditer(message)}
+
+    # Strip all linked patterns and raw URLs, then scan for remaining bare keys
+    stripped = _LINKED_KEY.sub('\x00', message)   # replace linked with null byte
+    stripped = _RAW_URL.sub('\x00', stripped)      # strip raw URLs
+
+    bare_keys = {m.group(1) for m in _JIRA_KEY.finditer(stripped)
+                 if _board(m.group(1)) not in NON_JIRA_PREFIXES}
+    unlinked  = bare_keys - linked_keys
+
+    if not unlinked:
+        runner.check('digest.all_jira_keys_linked', True)
+        return
+
+    # Separate into fails (primary-board keys in bold/table context) vs warnings
+    # Heuristic: key is a "primary subject" if it appears in bold (**KEY**) or
+    # at the start of a table cell (| KEY or |KEY)
+    _PRIMARY_CTX = re.compile(
+        r'(?:\*\*' + r'([A-Z][A-Z0-9]+-\d+)' + r'\*\*'   # **KEY**
+        r'|'
+        r'(?:^\||\| )([A-Z][A-Z0-9]+-\d+)(?:\s|\|)'       # | KEY | or |KEY|
+        r')',
+        re.MULTILINE
+    )
+    primary_bare = set()
+    for m in _PRIMARY_CTX.finditer(stripped):
+        k = m.group(1) or m.group(2)
+        if k and k in unlinked:
+            primary_bare.add(k)
+
+    secondary_bare = unlinked - primary_bare
+
+    runner.check('digest.primary_keys_linked',
+                 not primary_bare,
+                 f"Bare primary Jira keys (must link): {sorted(primary_bare)}")
+
+    if secondary_bare:
+        runner.warn('digest.secondary_keys_unlinked',
+                    f"Bare supporting-context keys (consider linking): {sorted(secondary_bare)}")
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description='Validate risk-register.json')
-    parser.add_argument('--prev', default=None, help='Path to previous register snapshot for regression checks')
-    parser.add_argument('--auto-prev', action='store_true', help='Fetch previous register from git HEAD automatically')
-    parser.add_argument('--register', default=REGISTER_PATH, help='Path to register file (default: risk-register.json)')
+    parser = argparse.ArgumentParser(description='Validate risk-register.json and/or Slack digest')
+    parser.add_argument('--prev',      default=None,  help='Path to previous register for regression checks')
+    parser.add_argument('--auto-prev', action='store_true', help='Fetch previous register from git HEAD~1')
+    parser.add_argument('--register',  default=REGISTER_PATH, help='Register file path')
+    parser.add_argument('--digest',    default=None,  help='Path to a text file containing the draft Slack digest')
     args = parser.parse_args()
 
+    runner = EvalRunner()
+
+    # ── Register evals ──
     print(f"\nLoading register: {args.register}")
     data = load_json(args.register)
     print(f"Run {data.get('run_number')} | {data.get('last_run')} | {len(data.get('risks', []))} risks")
@@ -333,8 +435,6 @@ def main():
         else:
             print("  Not available — skipping regression evals")
 
-    runner = EvalRunner()
-
     print("\nRunning structural evals...")
     run_structural(runner, data)
 
@@ -343,6 +443,13 @@ def main():
 
     print("Running trend evals...")
     run_trend(runner, data)
+
+    # ── Digest eval ──
+    if args.digest:
+        print(f"\nRunning digest eval: {args.digest}")
+        with open(args.digest, encoding='utf-8') as f:
+            digest_text = f.read()
+        run_digest_eval(runner, digest_text)
 
     passed = runner.report()
     sys.exit(0 if passed else 1)
