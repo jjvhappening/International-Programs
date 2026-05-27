@@ -357,12 +357,11 @@ def _board(key: str) -> str:
 
 
 def run_digest_eval(runner, message: str):
-    """Check that all Jira keys in a Slack digest message are hyperlinked.
+    """Check that ALL Jira keys in a Slack digest message are hyperlinked.
 
-    Rules:
-    - Any key that appears as the primary subject of a bullet (bold or at start
-      of a table cell) MUST be linked → FAIL if bare.
-    - Any key in a supporting description sentence → WARN if bare (not a hard fail).
+    Every Jira key — whether a headline issue, a supporting epic reference,
+    or a sub-task mentioned in a description — must be a markdown link.
+    No distinction between primary and secondary context: bare = FAIL.
     """
     # Collect correctly linked keys
     linked_keys = {m.group(1) for m in _LINKED_KEY.finditer(message)}
@@ -375,35 +374,9 @@ def run_digest_eval(runner, message: str):
                  if _board(m.group(1)) not in NON_JIRA_PREFIXES}
     unlinked  = bare_keys - linked_keys
 
-    if not unlinked:
-        runner.check('digest.all_jira_keys_linked', True)
-        return
-
-    # Separate into fails (primary-board keys in bold/table context) vs warnings
-    # Heuristic: key is a "primary subject" if it appears in bold (**KEY**) or
-    # at the start of a table cell (| KEY or |KEY)
-    _PRIMARY_CTX = re.compile(
-        r'(?:\*\*' + r'([A-Z][A-Z0-9]+-\d+)' + r'\*\*'   # **KEY**
-        r'|'
-        r'(?:^\||\| )([A-Z][A-Z0-9]+-\d+)(?:\s|\|)'       # | KEY | or |KEY|
-        r')',
-        re.MULTILINE
-    )
-    primary_bare = set()
-    for m in _PRIMARY_CTX.finditer(stripped):
-        k = m.group(1) or m.group(2)
-        if k and k in unlinked:
-            primary_bare.add(k)
-
-    secondary_bare = unlinked - primary_bare
-
-    runner.check('digest.primary_keys_linked',
-                 not primary_bare,
-                 f"Bare primary Jira keys (must link): {sorted(primary_bare)}")
-
-    if secondary_bare:
-        runner.warn('digest.secondary_keys_unlinked',
-                    f"Bare supporting-context keys (consider linking): {sorted(secondary_bare)}")
+    runner.check('digest.all_jira_keys_linked',
+                 not unlinked,
+                 f"Bare (unlinked) Jira keys: {sorted(unlinked)}")
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
