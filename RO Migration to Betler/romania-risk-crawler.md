@@ -414,7 +414,17 @@ The sub-agent architecture is the primary protection against context saturation 
 7. **Digest formatter** — reads severity from register; prepends risk ID (e.g. `RR-001`) to each bullet; promotes Escalated risks to the 🚨 section; produces the Slack message with @mentions for Jon and Niels
 8. **Auto-commenter** — posts to stale/flagged Jira issues
 9. **Schedule** — register as a Monday 09:00 GMT routine
-10. **Git commit and push** — after digest is posted, run:
+10. **Validate register** — before committing, run the eval harness to catch silent failures:
+    ```bash
+    python "RO Migration to Betler/validate_register.py" --auto-prev
+    ```
+    The harness runs 3 eval suites (633 checks as of run 16):
+    - **Structural** — valid JSON shape, score range (0–30), severity/score alignment, Escalated threshold (≥6), all Closed risks have score=0, `new_this_run` reset
+    - **Regression** — occurrences never decrease, no risk deleted, run_number incremented by 1, no direct Closed→Escalated jump, reopened risks have consecutive_misses=0
+    - **Trend** — stored `trend` symbol matches `score` vs `score_last_run` arithmetic (exceptions: `🆕` and zero→zero reopens)
+    If any eval fails, fix the register before committing. Exit code 0 = all passed, 1 = failures.
+
+11. **Git commit and push** — after evals pass and digest is posted, run:
     ```bash
     git add "RO Migration to Betler/risk-register.json"
     # also stage if Step 4b made changes:
