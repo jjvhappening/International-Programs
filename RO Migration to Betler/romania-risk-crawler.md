@@ -28,7 +28,7 @@ Also read these reference files before Phase 1 to avoid runtime lookup round-tri
 
 | Source | What to scan |
 |---|---|
-| **Jira** | All initiatives tagged with Program = "🇷🇴 Romania migration" (`cf[14342] = "🇷🇴 Romania migration"`) across all boards. As of 2026-05-01: **200 initiatives** across IP (113), PLAYER (75), GAM (5), DAP (4), PLT (2), SOC (1). Query must paginate — results exceed 100 per page. PLYRTPM is not in scope — it tracks Jon's TPM tasks, not program deliverables. |
+| **Jira** | All Romania migration initiatives across all boards. **JQL**: `project in (IP,PLAYER,GAM,DAP,PLT,SOC,SPORTS) AND text ~ "Romania" AND issuetype = Initiative AND status NOT IN (Backlog, "Won't Do") ORDER BY updated DESC`. ⚠️ `cf[14342] = "🇷🇴 Romania migration"` does **NOT** work — the emoji-prefixed multi-select field returns 0 results with `cf[]` equality; `text ~ "Romania"` is the confirmed working alternative. As of 2026-05-01: **200+ initiatives** across IP (113), PLAYER (75), GAM (5), DAP (4), PLT (2), SOC (1). Query must paginate — results exceed 100 per page. PLYRTPM is not in scope — it tracks Jon's TPM tasks, not program deliverables. |
 | **Slack** | All channels whose name contains `romania` or `ip` (including temp channels) |
 | **Notion** | CPR session pages across all P&T areas (see CPR Database Inventory below) |
 
@@ -366,7 +366,7 @@ The sub-agent architecture is the primary protection against context saturation 
 
 ### Steps to build:
 1a. **Load risk register** — read `risk-register.json` at the start of each run (create empty register if first run). For every risk where `notion_page_id` is set, read the Notion `Suppressed` checkbox and update `suppressed` in the JSON before scoring begins — this ensures suppressed risks are excluded from scoring, auto-comments, and digest output from the very first step.
-1. **Define Jira scope query** — fetch all in-scope initiatives across all boards using: `issuetype = Initiative AND cf[14342] = "🇷🇴 Romania migration" AND status NOT IN (Backlog, "Won't Do")`. **Request only these fields** (pass as `fields` parameter to avoid full-payload responses): `key,summary,status,updated,parent,customfield_12111,customfield_14447,customfield_12114,customfield_12121,customfield_12122,issuelinks,created,priority`. **Must paginate** — results exceed 100 (200 total as of 2026-05-01); fetch pages until `isLast = true`. Build a name index (`{ initiative_name → key, board, status }`) for Slack cross-referencing. Discard raw response after building the index. PLYRTPM is not in scope — do not query it. Immediately write the name index to `references/jira-name-index-temp.json` in this format: `{ "run_number": N, "generated": "ISO datetime", "index": { "KEY": { "summary": "...", "board": "...", "status": "..." } } }`. Clear the name index from in-context memory — all subsequent initiative lookups within this sub-agent read from the file on demand rather than scanning the full in-memory object.
+1. **Define Jira scope query** — fetch all in-scope initiatives across all boards using: `project in (IP,PLAYER,GAM,DAP,PLT,SOC,SPORTS) AND text ~ "Romania" AND issuetype = Initiative AND status NOT IN (Backlog, "Won't Do") ORDER BY updated DESC`. ⚠️ Do NOT use `cf[14342] = "🇷🇴 Romania migration"` — confirmed non-functional across multiple runs (returns 0 results); the custom field is an emoji-prefixed multi-select that does not respond to `cf[]` equality filtering. **Request only these fields** (pass as `fields` parameter to avoid full-payload responses): `key,summary,status,updated,parent,customfield_12111,customfield_14447,customfield_12114,customfield_12121,customfield_12122,issuelinks,created,priority`. **Must paginate** — results exceed 100 (200 total as of 2026-05-01); fetch pages until `isLast = true`. Build a name index (`{ initiative_name → key, board, status }`) for Slack cross-referencing. Discard raw response after building the index. PLYRTPM is not in scope — do not query it. Immediately write the name index to `references/jira-name-index-temp.json` in this format: `{ "run_number": N, "generated": "ISO datetime", "index": { "KEY": { "summary": "...", "board": "...", "status": "..." } } }`. Clear the name index from in-context memory — all subsequent initiative lookups within this sub-agent read from the file on demand rather than scanning the full in-memory object.
 > **Health field — confirmed field ID and value format (Run 15):** `customfield_12111` is correct and returns data when explicitly requested. Value format is emoji-prefixed: `"🟢 On Track"`, `"🟡 At Risk"`, `"🔴 Off Track"`. Signal matching must check for `"on track"` / `"at risk"` / `"off track"` (case-insensitive) — do NOT check for `"green"` / `"amber"` / `"red"`, those strings do not appear in the values. If health signals appear absent in a run, verify the `fields` parameter includes `customfield_12111` — ad-hoc extraction scripts in prior runs probed `customfield_14343`/`14344` which do not exist on these issues.
 
 1b. **Resolve blockers** — for each initiative that has an `is blocked by` issue link, fetch the blocking issue with `fields=key,summary,status,project,customfield_12121,customfield_12122,customfield_14342,updated`. Determine `in_program_scope` by checking whether `customfield_14342` contains option ID `17894`. Calculate `days_blocked` from the link creation date. Set `stale = true` if `updated` is more than 7 days ago. Apply the elevated signal weight (4) for out-of-scope stale blockers.
@@ -408,7 +408,7 @@ The sub-agent architecture is the primary protection against context saturation 
 5. **Exception — first run only**: if the register was empty or did not exist at load time, a full Write is acceptable since there is no prior state to diff against.
 
 **Second checkpoint (after Step 6b):** once Notion sync is complete, use the same targeted-Edit approach to write back any `notion_page_id` values that were set during Step 6b. Do not rewrite the whole file — only the risks whose `notion_page_id` changed from null to a real value.
-6b. **Notion sync** — for any risk with severity = High OR occurrences >= 2, create or update the corresponding page in the "RO Migration Risk Register" Notion database; store `notion_page_id` in JSON to avoid duplicates
+6b. **Notion sync** — for any risk with severity = High OR occurrences >= 2, create or update the corresponding page in the "RO Migration Risk Register" Notion database (collection `7f410211-1a06-4fcc-b10c-ab58571a781a`); store `notion_page_id` in JSON to avoid duplicates. **Batch creates**: `notion-create-pages` accepts up to 100 pages per call — submit all new pages in a single batch rather than one-by-one. **Updates**: use `notion-update-page` with `command: "update_properties"` — `content_updates` is NOT a parameter for `update_properties` and should be omitted. After writing, read back the `Suppressed` checkbox for all synced pages and update the `suppressed` flag in the JSON register accordingly.
 6c. **Mark resolved risks** — any risk in the JSON register that was NOT detected this run: increment `consecutive_misses`; at 1 miss set status = Resolved in Notion; at 2 misses set status = Closed and archive in JSON
 6d. **Dependency inference** — identify all pairs of in-scope initiatives that co-occurred in the same Slack thread or CPR agenda item this run. For each pair: (1) confirm no existing Jira link via `issuelinks`; (2) pass to Claude with initiative summaries, categories, signal patterns, and the verbatim co-occurrence evidence — ask Claude to assess whether a dependency is plausible and in which direction, with explicit reasoning; (3) only proceed if Claude returns high confidence. Check the `suggested_dependencies` register — if this pair was previously dismissed, only re-surface if `times_suggested` has incremented 3+ times since dismissal. Upsert into `suggested_dependencies` in the JSON register.
 7. **Digest formatter** — reads severity from register; prepends risk ID (e.g. `RR-001`) to each bullet; promotes Escalated risks to the 🚨 section; produces the Slack message with @mentions for Jon and Niels.
@@ -417,12 +417,13 @@ The sub-agent architecture is the primary protection against context saturation 
 9. **Schedule** — register as a Monday 09:00 GMT routine
 10. **Validate register** — before committing, run the eval harness to catch silent failures:
     ```bash
-    python "RO Migration to Betler/validate_register.py" --auto-prev
+    python "RO Migration to Betler/validate_register.py" --auto-prev --post-notion-sync
     ```
-    The harness runs 3 eval suites (633 checks as of run 16):
+    The harness runs 4 eval suites:
     - **Structural** — valid JSON shape, score range (0–30), severity/score alignment, Escalated threshold (≥6), all Closed risks have score=0, `new_this_run` reset
     - **Regression** — occurrences never decrease, no risk deleted, run_number incremented by 1, no direct Closed→Escalated jump, reopened risks have consecutive_misses=0
     - **Trend** — stored `trend` symbol matches `score` vs `score_last_run` arithmetic (exceptions: `🆕` and zero→zero reopens)
+    - **Notion sync** (`--post-notion-sync`) — every non-Closed/Resolved risk with severity=High or occurrences≥2 has a `notion_page_id` set
     If any eval fails, fix the register before committing. Exit code 0 = all passed, 1 = failures.
 
 11. **Git commit and push** — after evals pass and digest is posted, run:
@@ -434,6 +435,8 @@ The sub-agent architecture is the primary protection against context saturation 
     git push origin main
     ```
     Stage only `risk-register.json` and `references/slack-channels.md`. Do not stage helper scripts, temp files, or `.pkl` artifacts. The exact command `git push origin main` is required — the auto-mode classifier blocks the push unless this specific command appears in the task definition.
+
+12. **Clean up session-specific helper scripts** — delete any `extract_*.py`, `update_register.py`, `finalize_register.py`, or similar run-specific Python files from the project directory. These are created during runs as inline workarounds (e.g. for processing large Jira response files) and have no value after the run completes. Do not commit them — they are gitignored.
 
 ### Open decisions to confirm before build:
 - [x] Niels De Winde's Slack handle — confirmed `U04MM3C1H8U`

@@ -9,8 +9,11 @@ Usage:
     # Validate a digest message file before posting:
     python validate_register.py --digest digest.txt
 
-    # Both together:
-    python validate_register.py --auto-prev --digest digest.txt
+    # Assert all qualifying risks have Notion pages (run after Step 6b):
+    python validate_register.py --post-notion-sync
+
+    # Full post-run validation:
+    python validate_register.py --auto-prev --post-notion-sync
 
 Exit codes:
     0 — all evals passed
@@ -22,7 +25,10 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 REGISTER_PATH = os.path.join(os.path.dirname(__file__), 'risk-register.json')
 VALID_STATUSES = {'open', 'Escalated', 'Resolved', 'Closed'}
-VALID_TRENDS   = {'↑', '↓', '→', '🆕'}
+VALID_TRENDS   = {'↑', '↓', '→', '🆕', 'up', 'down', 'stable', 'new'}
+# Normalise word-based trends to arrow symbols for arithmetic comparisons
+_TREND_NORM    = {'up': '↑', 'down': '↓', 'stable': '→', 'new': '🆕',
+                  '↑': '↑', '↓': '↓', '→': '→', '🆕': '🆕'}
 VALID_SEVERITIES = {'low', 'medium', 'high'}
 MAX_SCORE = 30
 REQUIRED_FIELDS = {'id', 'status', 'score', 'severity', 'occurrences', 'consecutive_misses', 'new_this_run'}
@@ -307,6 +313,9 @@ def run_trend(runner, data):
         if status == 'Closed':
             continue
 
+        # Normalise to arrow symbol for arithmetic comparison
+        trend = _TREND_NORM.get(trend, trend)
+
         # Skip 🆕 (genuinely new or reopened this run with score=0→0)
         if trend == '🆕':
             continue
@@ -330,6 +339,32 @@ def run_trend(runner, data):
         runner.check(f'trend.{rid}',
                      trend == expected,
                      f"score {score_last}→{score} should give trend='{expected}' but got '{trend}'")
+
+
+# ── Notion sync evals ─────────────────────────────────────────────────────────
+
+def run_notion_sync(runner, data):
+    """Assert that every qualifying risk has a notion_page_id after Notion sync.
+
+    Qualifying = severity == 'high' OR occurrences >= 2.
+    Excludes Closed and Resolved risks (they don't require active Notion pages).
+    """
+    for r in data.get('risks', []):
+        rid    = r.get('id', '?')
+        status = r.get('status', '')
+        sev    = r.get('severity', '')
+        occ    = r.get('occurrences', 0)
+        pid    = r.get('notion_page_id')
+
+        if status in ('Closed', 'Resolved'):
+            continue
+
+        if sev == 'high' or occ >= 2:
+            runner.check(
+                f'notion_sync.{rid}.page_id_set',
+                pid is not None and pid != '',
+                f"severity={sev}, occurrences={occ}, status={status} — notion_page_id is null"
+            )
 
 
 # ── Digest eval ────────────────────────────────────────────────────────────────
@@ -383,10 +418,11 @@ def run_digest_eval(runner, message: str):
 
 def main():
     parser = argparse.ArgumentParser(description='Validate risk-register.json and/or Slack digest')
-    parser.add_argument('--prev',      default=None,  help='Path to previous register for regression checks')
-    parser.add_argument('--auto-prev', action='store_true', help='Fetch previous register from git HEAD~1')
-    parser.add_argument('--register',  default=REGISTER_PATH, help='Register file path')
-    parser.add_argument('--digest',    default=None,  help='Path to a text file containing the draft Slack digest')
+    parser.add_argument('--prev',             default=None,  help='Path to previous register for regression checks')
+    parser.add_argument('--auto-prev',        action='store_true', help='Fetch previous register from git HEAD~1')
+    parser.add_argument('--register',         default=REGISTER_PATH, help='Register file path')
+    parser.add_argument('--digest',           default=None,  help='Path to a text file containing the draft Slack digest')
+    parser.add_argument('--post-notion-sync', action='store_true', help='Assert all qualifying risks have a notion_page_id')
     args = parser.parse_args()
 
     runner = EvalRunner()
@@ -416,6 +452,10 @@ def main():
 
     print("Running trend evals...")
     run_trend(runner, data)
+
+    if args.post_notion_sync:
+        print("Running Notion sync evals...")
+        run_notion_sync(runner, data)
 
     # ── Digest eval ──
     if args.digest:

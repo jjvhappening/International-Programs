@@ -56,6 +56,13 @@ ORDER BY "Risk ID"
 
 For `notion-update-page`, use command `"update_properties"` with:
 - `properties`: JSON map of column name → value
-- `content_updates`: `[]` (empty array, required even when not updating content)
+- Do NOT include `content_updates` — it is not a parameter for `update_properties` (only for `update_content` command)
 
-Last updated: 2026-05-20
+## Notion Batch Create
+
+For creating new risk pages, use `notion-create-pages` with:
+- `parent`: `{"type": "data_source_id", "data_source_id": "7f410211-1a06-4fcc-b10c-ab58571a781a"}`
+- `pages`: array of page objects — accepts up to 100 pages per call; always batch rather than looping individually
+- Each page object needs a `properties` map; `Risk ID` is the title field
+
+Last updated: 2026-05-28

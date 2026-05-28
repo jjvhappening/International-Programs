@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Fixed
+- `romania-risk-crawler.md` Data Sources + Step 1: replaced `cf[14342] = "🇷🇴 Romania migration"` with `text ~ "Romania"` — the custom field approach is confirmed non-functional (returns 0 results) across all runs; `text ~ "Romania"` is the working JQL pattern
+- `references/notion-risk-register-schema.md`: removed incorrect `content_updates: []` guidance — this parameter does not exist on `update_properties` command; removed stale cross-reference
+
+### Added
+- `romania-risk-crawler.md` Step 6b: explicit note that `notion-create-pages` accepts up to 100 pages per call — batch all new page creates into a single API call
+- `romania-risk-crawler.md` Step 10: added `--post-notion-sync` flag to the validation command so it runs as part of the standard pre-commit check
+- `romania-risk-crawler.md` Step 12: new cleanup step — delete session-specific `extract_*.py`, `update_register.py`, `finalize_register.py` scripts after each run
+- `.gitignore`: added ignore patterns for `extract_*.py`, `update_register.py`, `finalize_register.py`, and `references/*-temp.json` to prevent helper scripts and temp files accumulating in git status
+- `references/notion-risk-register-schema.md`: added batch create pattern with correct `data_source_id` parent format and 100-page-per-call capacity note
+- `validate_register.py`: added `--post-notion-sync` eval suite — asserts every non-Closed/Resolved risk with severity=High or occurrences≥2 has a `notion_page_id` set; 686 checks total after addition
+- `validate_register.py`: added word-form trend aliases (`up`/`down`/`stable`/`new`) to `VALID_TRENDS` and normalisation mapping `_TREND_NORM` — register has used word-based trends throughout; validator now accepts both forms rather than failing on every risk
+
+
+
 ### Added
 - `romania-risk-crawler.md` Step 10: explicit git commit and push step with exact Bash commands — prompted by auto-mode classifier blocking `git push origin main` every run because "Git commit and push" generic language doesn't satisfy the classifier's specific-authorization requirement.
 

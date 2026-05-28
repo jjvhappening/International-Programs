@@ -2,3 +2,8 @@
 __pycache__/
 *.pyc
 .env
+# Session-specific helper scripts generated during crawler runs
+extract_*.py
+update_register.py
+finalize_register.py
+references/*-temp.json
