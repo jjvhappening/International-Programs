@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Added
+- `register_utils.py`: new permanent CLI utility replacing all ad-hoc register scripts. Subcommands: `summary`, `notion-sync-plan`, `set-meta`, `apply-scores`, `finalize`, `validate-fields`. Atomic write via `.tmp` + `os.replace()`. Idempotency guard on `apply-scores` prevents double-incrementing occurrences on session resume.
+- `jira_extract.py`: new permanent CLI utility for processing saved Jira API response files. Supports `--fields` with aliases (`prd`, `health`, `ssu` → `customfield_12114/12111/14447`), `--epics` summary mode, `--filter-key`, `--filter-status`. ADF→text conversion for SSU field. Handles all three Jira response formats (nodes, flat issues, bare list).
+- `romania-risk-crawler.md` Sub-Agent Prompt Templates appendix: self-contained prompts for Jira collector, Notion collector, and Slack collector sub-agents — pass directly to `Agent(prompt=...)` with run_number, last_run_date, register_path substituted in.
+- `romania-risk-crawler.md` Phase 0: added check for permanent utilities (`register_utils.py`, `jira_extract.py`) presence at run start.
+
+### Changed
+- `romania-risk-crawler.md` Sub-agent Launch Sequence: replaced prose description with concrete `Agent()` call syntax — parallel Jira + Notion collectors, then foreground Slack collector after name index is confirmed on disk. Added run_number verification step before Phase 4 proceeds.
+- `romania-risk-crawler.md` Step 6a-write: replaced manual targeted-Edit-calls approach with `register_utils.py apply-scores --file scores.json`. Defined `scores.json` format (scored_risks, new_risks, resolved_ids, suggested_dependencies). Manual Edit calls were fragile against context compaction — the utility is idempotent and handles all state transitions internally.
+- `romania-risk-crawler.md` Step 6b: added `register_utils.py notion-sync-plan` before sync (pre-computes all Notion property values) and `register_utils.py finalize --file finalize.json` after sync. Defined `finalize.json` format (notion_page_ids, suppressed_updates, comments_posted, sd_increments, meta).
+- `romania-risk-crawler.md` Step 12: updated cleanup targets — delete `scores.json`, `finalize.json`, and all `*-temp.json` files; explicitly preserve `register_utils.py` and `jira_extract.py`.
+
+
 ### Fixed
 - `romania-risk-crawler.md` Data Sources + Step 1: replaced `cf[14342] = "🇷🇴 Romania migration"` with `text ~ "Romania"` — the custom field approach is confirmed non-functional (returns 0 results) across all runs; `text ~ "Romania"` is the working JQL pattern
 - `references/notion-risk-register-schema.md`: removed incorrect `content_updates: []` guidance — this parameter does not exist on `update_properties` command; removed stale cross-reference

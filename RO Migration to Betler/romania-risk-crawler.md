@@ -22,6 +22,10 @@ Also read these reference files before Phase 1 to avoid runtime lookup round-tri
 - Slack channel IDs: `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\references\slack-channels.md`
 - Risk register: `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\risk-register.json`
 
+Verify permanent utilities are present (do not delete these between runs):
+- `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\register_utils.py`
+- `C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler\jira_extract.py`
+
 ---
 
 ## Data Sources
@@ -312,10 +316,40 @@ The crawl uses three parallel sub-agents for data collection. All raw API payloa
 
 **Launch sequence**
 
-1. Main session: Step 1a — load register, read Notion suppressed flags
-2. Main session: launch **Jira collector** and **Notion collector** sub-agents in parallel
-3. Main session: when Jira collector completes (name index written to disk), launch **Slack collector** sub-agent
-4. Main session: when all three sub-agents complete, read their output files and run Steps 6–8
+**Phase 1 (main session):** Load register + Notion suppressed flags (Step 1a). Read `risk-register.json` and note current `run_number` (N) and `last_run` date.
+
+**Phase 2 (parallel launch):** Launch Jira and Notion collectors simultaneously using the `Agent` tool:
+
+```
+Agent(
+  subagent_type="claude",
+  description="Jira collector — Run N",
+  prompt=<JIRA_COLLECTOR_PROMPT from Sub-Agent Prompt Templates appendix>,
+  run_in_background=True
+)
+
+Agent(
+  subagent_type="claude",
+  description="Notion CPR collector — Run N",
+  prompt=<NOTION_COLLECTOR_PROMPT from Sub-Agent Prompt Templates appendix>,
+  run_in_background=True
+)
+```
+
+Both prompts must have `run_number`, `last_run_date`, and the absolute path to `risk-register.json` substituted in before dispatch.
+
+**Phase 3 (after Jira collector notifies complete):** Verify `references/jira-name-index-temp.json` exists and its `run_number` matches N. Then launch Slack collector (foreground — it needs the name index):
+
+```
+Agent(
+  subagent_type="claude",
+  description="Slack collector — Run N",
+  prompt=<SLACK_COLLECTOR_PROMPT from Sub-Agent Prompt Templates appendix>,
+  run_in_background=False
+)
+```
+
+**Phase 4 (main session):** Once all three sub-agents have written their temp files, read `references/jira-signals-temp.json`, `references/slack-signals-temp.json`, `references/notion-signals-temp.json`. Verify `run_number` matches N in each. If any is missing or stale, abort and re-launch the failed sub-agent before proceeding. Continue with Steps 6–12.
 
 **Sub-agent responsibilities**
 
@@ -398,17 +432,98 @@ The sub-agent architecture is the primary protection against context saturation 
 - `signals_added` = only signal codes newly triggered this run (delta vs prior run — omit codes already present in prior `signals[]`)
 - `notes_update` = one-line free-text for any inference that doesn't fit a signal code — this is what gets written to the `notes` field in the register. Leave blank if nothing to note.
 - No per-risk narrative paragraphs. All reasoning must be captured in `signals_added` or `notes_update` — if it cannot fit there, it is not needed downstream.
-6a-write. **Write state checkpoint** — immediately after Step 6a completes (all risks scored), persist changes to `risk-register.json` using **targeted Edit calls only** — never a full-file Write. Do not wait until after Notion sync or Slack digest. This ensures scored state is preserved even if the session runs out of context before later steps complete.
+6a-write. **Write state checkpoint** — immediately after the Step 6a scoring table is complete, produce `scores.json` and run `register_utils.py`. Do not wait until after Notion sync. This ensures scored state is preserved even if the session runs out of context before later steps complete.
 
-**How to write:**
-1. Build a change list: compare each risk's current in-memory state to what was in the register at load time. Only include risks whose fields actually changed this run (`score`, `score_last_run`, `trend`, `severity`, `status`, `signals`, `slack_threads`, `days_to_release`, `occurrences`, `last_seen`, `consecutive_misses`, `new_this_run`, `notes`, `suppressed`, `planned_release_date`, `epic_context`).
-2. For each **changed existing risk**: use a targeted Edit call. The `old_string` must be the entire JSON object for that risk (from `{` to `}` including surrounding comma/whitespace as it appears on disk). The `new_string` is the updated version of that same object. One Edit call per risk.
-3. For each **new risk** (not present in the register at load time): append it to the `risks` array with a targeted Edit — find the closing `]` of the array and insert before it.
-4. Update `last_run` and `run_number` in the header block via a single targeted Edit.
-5. **Exception — first run only**: if the register was empty or did not exist at load time, a full Write is acceptable since there is no prior state to diff against.
+**scores.json format:**
+```json
+{
+  "run_number": 18,
+  "run_date": "2026-05-28",
+  "scored_risks": [
+    {
+      "id": "RR-001",
+      "score": 6,
+      "signals": ["stale_7d", "health_red"],
+      "notes": "one-line from notes_update column — blank if empty",
+      "planned_release_date": "2026-06-15",
+      "days_to_release": 18
+    }
+  ],
+  "new_risks": [
+    {
+      "id": "RR-052",
+      "title": "Short topic description",
+      "category": "technical",
+      "workstream": "IP",
+      "jira_issues": ["IP-45"],
+      "score": 4,
+      "signals": ["health_red"],
+      "notes": "",
+      "planned_release_date": null,
+      "days_to_release": null
+    }
+  ],
+  "resolved_ids": ["RR-008"],
+  "suggested_dependencies": [
+    {
+      "initiative_a": "IP-45",
+      "initiative_b": "IP-62",
+      "suggested_link": "IP-45 is blocked by IP-62",
+      "confidence_reason": "both named in same #ro-ip-temp thread (2026-05-28): 'wallet must be live before registration can complete'"
+    }
+  ]
+}
+```
 
-**Second checkpoint (after Step 6b):** once Notion sync is complete, use the same targeted-Edit approach to write back any `notion_page_id` values that were set during Step 6b. Do not rewrite the whole file — only the risks whose `notion_page_id` changed from null to a real value.
-6b. **Notion sync** — for any risk with severity = High OR occurrences >= 2, create or update the corresponding page in the "RO Migration Risk Register" Notion database (collection `7f410211-1a06-4fcc-b10c-ab58571a781a`); store `notion_page_id` in JSON to avoid duplicates. **Batch creates**: `notion-create-pages` accepts up to 100 pages per call — submit all new pages in a single batch rather than one-by-one. **Updates**: use `notion-update-page` with `command: "update_properties"` — `content_updates` is NOT a parameter for `update_properties` and should be omitted. After writing, read back the `Suppressed` checkbox for all synced pages and update the `suppressed` flag in the JSON register accordingly.
+Run:
+```bash
+python register_utils.py apply-scores --file scores.json
+```
+
+`apply-scores` handles: trend/severity computation, occurrences increment, `consecutive_misses` reset, new risk insertion, `resolved_ids` → status Resolved, suggested_dependency upsert, `run_number` bump, atomic write. **Idempotency guard**: if the register already has `run_number` matching `scores.json`, the command skips with a message — safe to re-run on session resume without double-incrementing occurrences.
+6b. **Notion sync** — for any risk with severity = High OR occurrences >= 2, create or update the corresponding page in the "RO Migration Risk Register" Notion database (collection `7f410211-1a06-4fcc-b10c-ab58571a781a`).
+
+**Before syncing**, run to get pre-computed property values for all pages:
+```bash
+python register_utils.py notion-sync-plan
+```
+This outputs a CREATE section (risks with `notion_page_id = null`) and an UPDATE section (existing pages). Use this output as the source of truth for the Notion API calls — do not re-derive property values from the register directly.
+
+**Batch creates**: `notion-create-pages` accepts up to 100 pages per call — submit all new pages in a single batch rather than one-by-one. **Updates**: use `notion-update-page` with `command: "update_properties"` — `content_updates` is NOT a parameter for `update_properties` and should be omitted. After writing, read back the `Suppressed` checkbox for all synced pages.
+
+**After all Notion operations complete**, produce `finalize.json` and run:
+```bash
+python register_utils.py finalize --file finalize.json
+```
+
+**finalize.json format:**
+```json
+{
+  "run_number": 18,
+  "notion_page_ids": {
+    "RR-051": "abc123def456abc123def456abc12345",
+    "RR-052": "789abc789abc789abc789abc78901234"
+  },
+  "suppressed_updates": {
+    "RR-007": true
+  },
+  "comments_posted": [
+    {
+      "risk_id": "RR-001",
+      "jira_key": "IP-45",
+      "date": "2026-05-28",
+      "comment_id": "12345678"
+    }
+  ],
+  "sd_increments": ["SD-001"],
+  "meta": {
+    "last_run": "2026-05-28",
+    "run_number": 18
+  }
+}
+```
+
+`finalize` writes: `notion_page_id` for all newly created pages, `suppressed` sync from Notion readback, `comments_posted` entries (audit trail, never overwritten), `times_suggested` increments for SDs, `last_run`/`run_number` header update. All via atomic write.
 6c. **Mark resolved risks** — any risk in the JSON register that was NOT detected this run: increment `consecutive_misses`; at 1 miss set status = Resolved in Notion; at 2 misses set status = Closed and archive in JSON
 6d. **Dependency inference** — identify all pairs of in-scope initiatives that co-occurred in the same Slack thread or CPR agenda item this run. For each pair: (1) confirm no existing Jira link via `issuelinks`; (2) pass to Claude with initiative summaries, categories, signal patterns, and the verbatim co-occurrence evidence — ask Claude to assess whether a dependency is plausible and in which direction, with explicit reasoning; (3) only proceed if Claude returns high confidence. Check the `suggested_dependencies` register — if this pair was previously dismissed, only re-surface if `times_suggested` has incremented 3+ times since dismissal. Upsert into `suggested_dependencies` in the JSON register.
 7. **Digest formatter** — reads severity from register; prepends risk ID (e.g. `RR-001`) to each bullet; promotes Escalated risks to the 🚨 section; produces the Slack message with @mentions for Jon and Niels.
@@ -436,7 +551,13 @@ The sub-agent architecture is the primary protection against context saturation 
     ```
     Stage only `risk-register.json` and `references/slack-channels.md`. Do not stage helper scripts, temp files, or `.pkl` artifacts. The exact command `git push origin main` is required — the auto-mode classifier blocks the push unless this specific command appears in the task definition.
 
-12. **Clean up session-specific helper scripts** — delete any `extract_*.py`, `update_register.py`, `finalize_register.py`, or similar run-specific Python files from the project directory. These are created during runs as inline workarounds (e.g. for processing large Jira response files) and have no value after the run completes. Do not commit them — they are gitignored.
+12. **Clean up run-specific temp files** — delete these after each run:
+    ```bash
+    rm scores.json finalize.json
+    rm references/jira-signals-temp.json references/slack-signals-temp.json references/notion-signals-temp.json
+    rm references/jira-name-index-temp.json
+    ```
+    **Do NOT delete** `register_utils.py` or `jira_extract.py` — these are permanent utilities. If any `extract_*.py`, `update_register.py`, or `finalize_register.py` files exist from a pre-utility run, delete those too.
 
 ### Open decisions to confirm before build:
 - [x] Niels De Winde's Slack handle — confirmed `U04MM3C1H8U`
@@ -741,3 +862,140 @@ When a mitigation is underway, `mitigation_status` progresses through: `none →
 2. Build and test signal logic against a known at-risk issue
 3. Schedule routine
 4. Update PLYRTPM-33 with this plan as description
+
+---
+
+## Sub-Agent Prompt Templates
+
+These prompts are passed verbatim to `Agent(prompt=...)` at run time. Substitute `{run_number}`, `{last_run_date}`, and `{register_path}` before dispatch. Each prompt instructs the sub-agent to read this skill file for full signal logic detail and return a one-line summary only — data travels via temp files, not via the return value.
+
+---
+
+### JIRA_COLLECTOR_PROMPT
+
+```
+You are the Jira collector sub-agent for the Romania Risk Crawler (PLYRTPM-33), Run {run_number}.
+
+## Project directory
+C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler
+
+## First: read these files for full signal definitions and field IDs
+- romania-risk-crawler.md (Steps 1, 1b, 1c, 1d, 1e — Signal Logic section, Epic Context Check)
+- references/notion-risk-register-schema.md (not needed for Jira but load anyway for run context)
+- risk-register.json (read current state for slip detection; path: {register_path})
+
+## Tools to load (ToolSearch)
+select:mcp__b846195e-69b9-4ade-88d4-18e6a3f23890__searchJiraIssuesUsingJql,mcp__b846195e-69b9-4ade-88d4-18e6a3f23890__getJiraIssue,mcp__b846195e-69b9-4ade-88d4-18e6a3f23890__editJiraIssue
+
+## Run inputs
+- run_number: {run_number}
+- last_run_date: {last_run_date}
+
+## Your tasks (in order)
+1. Execute Step 1 from the skill: fetch all in-scope initiatives using the confirmed JQL. Request only the specified fields. Paginate until isLast=true.
+2. Execute Step 1b: build the name index and write it to references/jira-name-index-temp.json. Discard raw API response from context immediately after.
+3. Execute Step 1c: evaluate signals for every initiative, including Epic Context Check for overdue initiatives.
+4. Execute Step 1d: stamp ro-not-closed-out labels on PLAYER initiatives as needed.
+5. Execute Step 1e (blocker resolution): fetch blocking issues for any initiative with an "is blocked by" link.
+
+## Output
+Write to: references/jira-signals-temp.json
+Use the Sub-agent output file format defined in the skill (run_number, generated, signals array).
+
+## Context rules
+- Discard raw API payloads immediately after field extraction
+- For responses > 50k chars: use PowerShell ConvertFrom-Json to reduce before processing
+- Return ONE LINE only: "Jira collector complete: N initiatives scanned, N signals written to jira-signals-temp.json"
+- The full signal list travels via the output file, not your response
+```
+
+---
+
+### NOTION_COLLECTOR_PROMPT
+
+```
+You are the Notion CPR collector sub-agent for the Romania Risk Crawler (PLYRTPM-33), Run {run_number}.
+
+## Project directory
+C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler
+
+## First: read these files
+- romania-risk-crawler.md (Step 5 — CPR scanner, Notion CPR Database Inventory, Signal Logic section 3)
+- risk-register.json (read current state; path: {register_path})
+
+## Tools to load (ToolSearch)
+select:mcp__3da07a3d-3738-4c02-999f-340a5e731aae__notion-query-data-sources,mcp__3da07a3d-3738-4c02-999f-340a5e731aae__notion-search,mcp__3da07a3d-3738-4c02-999f-340a5e731aae__notion-fetch
+
+## Run inputs
+- run_number: {run_number}
+- last_run_date: {last_run_date}
+
+## Your tasks
+Execute Step 5 from the skill: query all CPR databases listed in the Notion CPR Database Inventory. Extract unresolved and recurring agenda items. Apply the Notion signal weights (CPR Signal Logic table). Structured DB signals carry full weight; unstructured page signals carry reduced weight — flag them as low-confidence.
+
+## Output
+Write to: references/notion-signals-temp.json
+Format:
+{
+  "run_number": {run_number},
+  "generated": "<ISO datetime>",
+  "signals": [
+    {
+      "key": "IP-45",
+      "sources": ["cpr"],
+      "signals": ["cpr_recurring"],
+      "score_contribution": 3,
+      "days_to_release": null,
+      "planned_release_date": null,
+      "product_lead": null,
+      "engineering_lead": null,
+      "epic_context": null,
+      "slack_threads": [],
+      "label_actions": [],
+      "notes": "brief evidence note"
+    }
+  ]
+}
+
+## Context rules
+- Discard raw Notion page content after extracting signals — retain only the signal objects
+- Return ONE LINE only: "Notion collector complete: N CPR databases scanned, N signals written to notion-signals-temp.json"
+```
+
+---
+
+### SLACK_COLLECTOR_PROMPT
+
+```
+You are the Slack collector sub-agent for the Romania Risk Crawler (PLYRTPM-33), Run {run_number}.
+
+## Project directory
+C:\Users\JonVince\Documents\GitHub\International-Programs\RO Migration to Betler
+
+## First: read these files
+- romania-risk-crawler.md (Steps 2, 4, 4b — Slack scanner, channel discovery, channel reference sync)
+- references/slack-channels.md (known channel IDs and last_active dates)
+- references/jira-name-index-temp.json (written by Jira collector — verify run_number={run_number} before using)
+- risk-register.json (path: {register_path})
+
+## Tools to load (ToolSearch)
+select:mcp__95268b0a-2ab0-44e0-9a74-e956c9f0dc3b__slack_search_public_and_private,mcp__95268b0a-2ab0-44e0-9a74-e956c9f0dc3b__slack_search_channels,mcp__95268b0a-2ab0-44e0-9a74-e956c9f0dc3b__slack_read_channel,mcp__95268b0a-2ab0-44e0-9a74-e956c9f0dc3b__slack_read_thread
+
+## Run inputs
+- run_number: {run_number}
+- last_run_date: {last_run_date}
+
+## Your tasks (in order)
+1. Execute Step 2: discover all Slack channels with "romania" or "ip" in their name.
+2. Execute Step 4: scan channels using the priority and window rules from the skill (7-day for known channels, 24-hour for new channels). For each signal, attempt to match the topic to a Jira initiative key using the name index.
+3. Execute Step 4b: sync references/slack-channels.md — add new channels, refresh last_active for active channels, prune channels stale for 30+ days. Use targeted Edit calls (one per changed row), never a full file rewrite. Do NOT prune channels with unknown last_active.
+
+## Output
+Write to: references/slack-signals-temp.json
+Use the same format as the Jira collector output (run_number, generated, signals array with sources=["slack"]).
+Include slack_threads array for each signal: [{url, channel, summary}].
+
+## Context rules
+- Discard raw Slack message content after extracting signal objects — never hold full channel histories in context
+- Return ONE LINE only: "Slack collector complete: N channels scanned, N signals written to slack-signals-temp.json, N channel rows updated in slack-channels.md"
+```
