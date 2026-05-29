@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+- `romania-risk-crawler.md` Notion property table (Workstream): updated from `IP / GAM / DAP` to the full 6-value set `IP / GAM / DAP / PLT / PLAYER / SOC`; added rule that cross-cutting risks (compliance audit, platform-wide) use **IP** as default — prompted by Run 18 failure creating RR-052 with invalid value "CROSS"
+- `references/notion-risk-register-schema.md` Workstream comment: added cross-cutting default rule inline — use "IP" for risks with no single owning Jira board
+
 ### Added
 - `register_utils.py`: new permanent CLI utility replacing all ad-hoc register scripts. Subcommands: `summary`, `notion-sync-plan`, `set-meta`, `apply-scores`, `finalize`, `validate-fields`. Atomic write via `.tmp` + `os.replace()`. Idempotency guard on `apply-scores` prevents double-incrementing occurrences on session resume.
 - `jira_extract.py`: new permanent CLI utility for processing saved Jira API response files. Supports `--fields` with aliases (`prd`, `health`, `ssu` → `customfield_12114/12111/14447`), `--epics` summary mode, `--filter-key`, `--filter-status`. ADF→text conversion for SSU field. Handles all three Jira response formats (nodes, flat issues, bare list).

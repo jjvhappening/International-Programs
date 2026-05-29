@@ -817,7 +817,7 @@ A dedicated Notion database **"RO Migration Risk Register"** is created in the s
 | Impact | Select: High / Medium / Low |
 | Trend | Select: Worsening ↑ / Stable → / Improving ↓ |
 | Status | Select: Open / Monitoring / Escalated / Resolved / Closed / Suppressed |
-| Workstream | Select: IP / GAM / DAP |
+| Workstream | Select: IP / GAM / DAP / PLT / PLAYER / SOC — cross-cutting risks with no single Jira board (e.g. compliance audit, platform-wide) use **IP** |
 | Sources | Multi-select: Jira / Slack / CPR |
 | Linked Jira Issues | Text (comma-separated keys) |
 | Product Lead | Text |

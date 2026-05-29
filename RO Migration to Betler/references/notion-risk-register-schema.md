@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS "collection://7f410211-1a06-4fcc-b10c-ab58571a781a" (
     "Suppressed" TEXT,          -- "__YES__" = true, "__NO__" = false
     "Signals" TEXT,
     "Trend" TEXT,               -- "Worsening" | "Stable" | "Improving"
-    "Workstream" TEXT,          -- "IP" | "GAM" | "DAP" | "PLT" | "PLAYER" | "SOC"
+    "Workstream" TEXT,          -- "IP" | "GAM" | "DAP" | "PLT" | "PLAYER" | "SOC" | cross-cutting/compliance risks with no single board → use "IP"
     "Days to Release" FLOAT,
     "Mitigation Status" TEXT,   -- "None" | "Planned" | "In Progress" | "Complete"
     "Jira Initiative" TEXT,
